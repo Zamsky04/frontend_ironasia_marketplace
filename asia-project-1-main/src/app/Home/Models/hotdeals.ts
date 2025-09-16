@@ -1,0 +1,23 @@
+export interface hotdeals{
+hotdealsRequestNo: string,
+hotdealsSeqNo: number,
+hotdealsProductCode: number,
+hotdealsProductName: string,
+hotdealsProductTypeCode: number,
+hotdealsProductTypeName: string,
+hotdealsProductPrice: number,
+hotdealsProductDesc: string,
+hotdealsProductAlias:string,
+hotdealsProductSize: string,
+hotdealsProductSpec: string,
+hotdealsProductStock: number,
+hotdealsProductMinPurc: number,
+hotdealsProductImage1: string,
+hotdealsProductImage2: string,
+hotdealsProductImage3: string,
+hotdealsProductImage4: string,
+hotdealsSuppNo: string,
+hotdealsAreaName: string,
+hotdealsProvinsi: string,
+hotdealsCity: string
+}

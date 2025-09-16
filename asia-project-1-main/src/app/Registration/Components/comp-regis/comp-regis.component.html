@@ -1,0 +1,449 @@
+<div class="divide-y divide-blue-300 p-4 md:p-8 bg-gray-100 min-h-screen">
+
+
+  <div class="pt-0.5 pb-0.5 md:pt-1 md:pb-1 text-center">
+    <div class="relative">
+      <div class="relative z-10">
+        <h1 class="text-1xl sm:text-5xl md:text-3xl font-bold font-sans tracking-tight leading-tight">
+          <span class="block text-slate-800 dark:text-slate-100 pb-0 md:pb-1">
+            Sign up for Iron Asia
+          </span>
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="RegisForm" novalidate class="space-y-6 ">
+    <div>
+      <mat-tab-group class="mt-5 shadow-lg rounded-lg overflow-hidden" animationDuration="500ms" mat-align-tabs="start">
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="flex items-center space-x-2 py-3 px-5 transition-colors duration-200 ease-in-out group">
+              <mat-icon class="text-indigo-600 group-hover:text-indigo-700">account_circle</mat-icon>
+              <span class="font-semibold text-gray-700 group-hover:text-gray-800">General</span>
+            </div>
+          </ng-template>
+          <div class="bg-white rounded-b-lg p-6 md:p-8 space-y-6 border border-gray-200 border-t-0">
+
+            <div class="space-y-1">
+              <label for="vccregCustType" class="block text-sm font-medium text-gray-700">Customer Type <span class="text-red-500">*</span></label>
+              <select 
+                id="vccregCustType" 
+                [(ngModel)]="vccregCustType" 
+                (ngModelChange)="onTypeSelectionChange()"
+                [ngModelOptions]="{standalone: true}"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2.5 bg-gray-50 text-gray-900 transition-shadow duration-150 ease-in-out">
+                <option value="retail">Individual (Retail)</option>
+                <option value="business">Company (Business)</option>
+              </select>
+            </div>
+
+            <div class="space-y-1">
+              <label for="ccregName" class="block text-sm font-medium text-gray-700">
+                <span *ngIf="vccregCustType === 'retail'">Individual</span>
+                <span *ngIf="vccregCustType === 'business'">Company</span>
+                <span class="text-red-500">*</span>
+                 Name
+              </label>
+              <input type="text" formControlName="ccregName" id="ccregName"
+                placeholder="Masukkan nama perusahaan/perorangan"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregName')?.invalid && RegisForm.get('ccregName')?.touched}" />
+              <div *ngIf="RegisForm.get('ccregName')?.invalid && RegisForm.get('ccregName')?.touched"
+                class="text-red-500 text-xs mt-1">
+                Name is required
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label for="ccregNickName" class="block text-sm font-medium text-gray-700">Alias Name</label>
+              <input type="text" formControlName="ccregNickName" id="ccregNickName"
+                placeholder="Masukkan nama alias (opsional)"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out" />
+            </div>
+
+            <div class="space-y-1">
+              <label for="ccregPic1Name" class="block text-sm font-medium text-gray-700">Contact Person (PIC)
+                <span class="text-red-500">*</span></label>
+              <input type="text" formControlName="ccregPic1Name" id="ccregPic1Name" placeholder="Masukkan nama PIC"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregPic1Name')?.invalid && RegisForm.get('ccregPic1Name')?.touched}" />
+              <div *ngIf="RegisForm.get('ccregPic1Name')?.invalid && RegisForm.get('ccregPic1Name')?.touched"
+                class="text-red-500 text-xs mt-1">
+                Contact Person is required
+              </div>
+            </div>
+            
+            <ng-container *ngIf="vccregCustType">
+              <div class="space-y-1">
+                <label for="ccregNationId" class="block text-sm font-medium text-gray-700">National ID Number <span class="text-red-500">*</span></label>
+                <input type="text" formControlName="ccregNationId" id="ccregNationId"
+                  placeholder="Masukkan 16 digit nomor KTP" maxlength="16"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                  [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregNationId')?.invalid && RegisForm.get('ccregNationId')?.touched}" />
+                <div *ngIf="RegisForm.get('ccregNationId')?.errors?.['required'] && RegisForm.get('ccregNationId')?.touched"
+                  class="text-red-500 text-xs mt-1">
+                  National ID Number is required.
+                </div>
+                <div *ngIf="RegisForm.get('ccregNationId')?.errors?.['pattern'] && RegisForm.get('ccregNationId')?.touched"
+                  class="text-red-500 text-xs mt-1">
+                  National ID Number must be 16 digits.
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">National ID Upload</label>
+                 <p class="text-xs text-gray-500">Maximum file size: 1MB</p>
+                <div class="flex flex-col items-center space-y-3 border-2 border-dashed border-gray-300 hover:border-indigo-400 p-4 rounded-md transition-colors duration-200 ease-in-out">
+                  <img [src]="preview || 'assets/placeholder-image.png'" alt="National Id Preview"
+                    class="h-40 w-auto max-w-xs object-contain rounded-md shadow-md bg-gray-50" />
+                  <input type="file" accept="image/png, image/jpeg, image/jpg" #fileInput style="display: none"
+                    (change)="selectImageNik($event)" />
+                  <button type="button"
+                    class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150 ease-in-out"
+                    (click)="fileInput.click()">
+                    <mat-icon class="mr-1 align-middle text-sm">cloud_upload</mat-icon> Select National ID Image
+                  </button>
+                </div>
+                 <div *ngIf="RegisForm.errors?.['nationIdImageRequired'] && (RegisForm.get('ccregNationId')?.touched || RegisForm.get('ccregNationId')?.dirty)"
+                     class="text-red-500 text-xs mt-1">
+                 National ID image upload is required when the National ID number is filled.
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="vccregCustType === 'business'">
+              <div class="space-y-1">
+                <label for="ccregNibId" class="block text-sm font-medium text-gray-700">Business Identification Number <span class="text-red-500">*</span></label>
+                 <p class="text-xs text-gray-500">Maximum file size: 1MB</p>                
+                <input type="text" formControlName="ccregNibId" id="ccregNibId"
+                  placeholder="Masukkan nomor NIB (jika ada)"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                  [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregNibId')?.invalid && RegisForm.get('ccregNibId')?.touched}" />
+                <div *ngIf="RegisForm.get('ccregNibId')?.invalid && RegisForm.get('ccregNibId')?.touched"
+                  class="text-red-500 text-xs mt-1">
+                  Nomor NIB wajib diisi untuk tipe Perusahaan.
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">Business Identification Number Upload</label>
+                <div class="flex flex-col items-center space-y-3 border-2 border-dashed border-gray-300 hover:border-indigo-400 p-4 rounded-md transition-colors duration-200 ease-in-out">
+                  <img [src]="preview2 || 'assets/placeholder-image.png'" alt="Business No Preview"
+                    class="h-40 w-auto max-w-xs object-contain rounded-md shadow-md bg-gray-50" />
+                  <input type="file" accept="image/png, image/jpeg, image/jpg" #fileInput2 style="display: none"
+                    (change)="selectImageNib($event)" />
+                  <button type="button"
+                    class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150 ease-in-out"
+                    (click)="fileInput2.click()">
+                    <mat-icon class="mr-1 align-middle text-sm">cloud_upload</mat-icon> Select NIB Image
+                  </button>
+                </div>
+                <div *ngIf="RegisForm.errors?.['nibIdImageRequired'] && (RegisForm.get('ccregNibId')?.touched || RegisForm.get('ccregNibId')?.dirty)"
+                     class="text-red-500 text-xs mt-1">
+                  NIB image upload is required when the National ID number is filled.
+                </div>
+              </div>
+              
+            </ng-container>
+            
+            <div formArrayName="bisnisInti">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4 pt-2 border-t border-gray-200">Choose Core Business</h3>
+              <div *ngIf="vprodlist && vprodlist.length > 0 && bisnisIntiControls.length === vprodlist.length; else noDataBisnis">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                  <div *ngFor="let control of bisnisIntiControls; let i = index"
+                    class="flex items-center p-3 border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-all duration-200 ease-in-out bg-white cursor-pointer hover:bg-indigo-50 focus-within:ring-2 focus-within:ring-indigo-500">
+                    <input type="checkbox" [id]="'product-' + vprodlist[i].cmprCode + '-' + i" [formControlName]="i"
+                      class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer">
+                    <label [for]="'product-' + vprodlist[i].cmprCode + '-' + i"
+                      class="ml-3 block text-sm font-medium text-gray-700 cursor-pointer truncate select-none flex-1"
+                      [title]="vprodlist[i].cmprName"> {{ vprodlist[i].cmprName }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="flex items-center space-x-2 py-3 px-5 transition-colors duration-200 ease-in-out group">
+              <mat-icon class="text-indigo-600 group-hover:text-indigo-700">home</mat-icon>
+              <span class="font-semibold text-gray-700 group-hover:text-gray-800">Address</span>
+            </div>
+          </ng-template>
+          <div class="bg-white rounded-b-lg p-6 md:p-8 space-y-6 border border-gray-200 border-t-0">
+            
+            <div class="space-y-1">
+              <label for="ccregAddress" class="block text-sm font-medium text-gray-700">Address <span
+                  class="text-red-500">*</span></label>
+              <input type="text" formControlName="ccregAddress" id="ccregAddress"
+                placeholder="Enter street, house number, etc."
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregAddress')?.invalid && RegisForm.get('ccregAddress')?.touched}" />
+              <div *ngIf="RegisForm.get('ccregAddress')?.invalid && RegisForm.get('ccregAddress')?.touched"
+                class="text-red-500 text-xs mt-1">
+                Address is required.
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+              <div class="space-y-1">
+                <label for="ccregRt" class="block text-sm font-medium text-gray-700">Neighborhood Association</label>
+                <input type="text" formControlName="ccregRt" id="ccregRt" placeholder="RT (angka)"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                  [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregRt')?.invalid && RegisForm.get('ccregRt')?.touched}" />
+                <div *ngIf="RegisForm.get('ccregRt')?.invalid && RegisForm.get('ccregRt')?.touched"
+                  class="text-red-500 text-xs mt-1">
+                  Neighborhood Association must be numeric.
+                </div>
+              </div>
+              <div class="space-y-1">
+                <label for="ccregRw" class="block text-sm font-medium text-gray-700">Community Association</label>
+                <input type="text" formControlName="ccregRw" id="ccregRw" placeholder="RW (angka)"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                  [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregRw')?.invalid && RegisForm.get('ccregRw')?.touched}" />
+                <div *ngIf="RegisForm.get('ccregRw')?.invalid && RegisForm.get('ccregRw')?.touched"
+                  class="text-red-500 text-xs mt-1">
+                  Community Association must be numeric.
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+              <div class="space-y-1">
+                <label for="ccregProvIdControl" class="block text-sm font-medium text-gray-700">Provinsi <span class="text-red-500">*</span></label>
+                <select id="ccregProvIdControl" formControlName="ccregProvId" (change)="changeprov()"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2.5 bg-gray-50 text-gray-900 transition-shadow duration-150 ease-in-out"
+                  [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregProvId')?.invalid && (RegisForm.get('ccregProvId')?.touched || RegisForm.get('ccregProvId')?.dirty)}">
+                  <option value="">Pilih Provinsi</option>
+                  <option *ngFor="let pro of provlist" [value]="pro.cmpsiProvCode">
+                    {{ pro.cmpsiProvinsi }}
+                  </option>
+                </select>
+                <div *ngIf="RegisForm.get('ccregProvId')?.invalid && (RegisForm.get('ccregProvId')?.touched || RegisForm.get('ccregProvId')?.dirty)" class="text-red-500 text-xs mt-1">
+                  <div *ngIf="RegisForm.get('ccregProvId')?.errors?.['required']">Provinsi is required.</div>
+                </div>
+              </div>
+              <div class="space-y-1">
+                <label for="ccregCityIdControl" class="block text-sm font-medium text-gray-700">City <span class="text-red-500">*</span></label>
+                <select id="ccregCityIdControl" formControlName="ccregCityId" (change)="changecity()"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2.5 bg-gray-50 text-gray-900 transition-shadow duration-150 ease-in-out"
+                  [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregCityId')?.invalid && (RegisForm.get('ccregCityId')?.touched || RegisForm.get('ccregCityId')?.dirty)}">
+                  <option value="">Pilih Kabupaten/Kota</option>
+                  <option *ngFor="let ct of citylist" [value]="ct.cmcitCityCode">
+                    {{ ct.cmcitCity }}
+                  </option>
+                </select>
+                <div *ngIf="RegisForm.get('ccregCityId')?.invalid && (RegisForm.get('ccregCityId')?.touched || RegisForm.get('ccregCityId')?.dirty)" class="text-red-500 text-xs mt-1">
+                    <div *ngIf="RegisForm.get('ccregCityId')?.errors?.['required']">City is required.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+              <div class="space-y-1">
+                <label for="ccregKecIdControl" class="block text-sm font-medium text-gray-700">District <span class="text-red-500">*</span></label>
+                <select id="ccregKecIdControl" formControlName="ccregKecId" (change)="changekecamatan()"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2.5 bg-gray-50 text-gray-900 transition-shadow duration-150 ease-in-out"
+                  [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregKecId')?.invalid && (RegisForm.get('ccregKecId')?.touched || RegisForm.get('ccregKecId')?.dirty)}">
+                  <option value="">Pilih Kecamatan</option>
+                  <option *ngFor="let kc of keclist" [value]="kc.cmkecKecCode"> {{ kc.cmkecKecamatan }}
+                  </option>
+                </select>
+                  <div *ngIf="RegisForm.get('ccregKecId')?.invalid && (RegisForm.get('ccregKecId')?.touched || RegisForm.get('ccregKecId')?.dirty)" class="text-red-500 text-xs mt-1">
+                    <div *ngIf="RegisForm.get('ccregKecId')?.errors?.['required']">District is required.</div>
+                  </div>
+              </div>
+              <div class="space-y-1">
+                <label for="ccregKelIdControl" class="block text-sm font-medium text-gray-700">Subdistrict <span class="text-red-500">*</span></label>
+                <select id="ccregKelIdControl" formControlName="ccregKelId" (change)="changekelurahan()"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2.5 bg-gray-50 text-gray-900 transition-shadow duration-150 ease-in-out"
+                  [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregKelId')?.invalid && (RegisForm.get('ccregKelId')?.touched || RegisForm.get('ccregKelId')?.dirty)}">
+                  <option value="">Pilih Kelurahan</option>
+                  <option *ngFor="let kl of kellist" [value]="kl.cmkelKelCode"> {{ kl.cmkelKelurahan }}
+                  </option>
+                </select>
+                  <div *ngIf="RegisForm.get('ccregKelId')?.invalid && (RegisForm.get('ccregKelId')?.touched || RegisForm.get('ccregKelId')?.dirty)" class="text-red-500 text-xs mt-1">
+                    <div *ngIf="RegisForm.get('ccregKelId')?.errors?.['required']">Subdistrict is required.</div>
+                  </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+              <div class="space-y-1">
+                <label for="ccregArea" class="block text-sm font-medium text-gray-700">Area Name</label>
+                <input type="text" formControlName="ccregArea" id="ccregArea" placeholder="Contoh: Komplek Ruko ABC"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out" />
+              </div>
+              <div class="space-y-1">
+                <label for="ccregZip" class="block text-sm font-medium text-gray-700">Zip Code</label>
+                <input type="text" formControlName="ccregZip" id="ccregZip" placeholder="Kode Pos (5 digit)"
+                  maxlength="5"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                  [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregZip')?.invalid && RegisForm.get('ccregZip')?.touched}" />
+                <div *ngIf="RegisForm.get('ccregZip')?.invalid && RegisForm.get('ccregZip')?.touched"
+                  class="text-red-500 text-xs mt-1">
+                  Kode Pos harus 5 digit angka.
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+              <div class="space-y-1">
+                <label for="ccregPhone" class="block text-sm font-medium text-gray-700">Office Phone Number</label>
+                <input type="text" formControlName="ccregPhone" id="ccregPhone" placeholder="Nomor telepon kantor"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                  [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregPhone')?.invalid && RegisForm.get('ccregPhone')?.touched}" />
+                <div *ngIf="RegisForm.get('ccregPhone')?.invalid && RegisForm.get('ccregPhone')?.touched"
+                  class="text-red-500 text-xs mt-1">
+                  Invalid phone format. Example: (021)12345678.
+                </div>
+              </div>
+              <div class="space-y-1">
+                <label for="ccregLongLat" class="block text-sm font-medium text-gray-700">Latitude & Longitude</label>
+                <input type="text" formControlName="ccregLongLat" id="ccregLongLat"
+                  placeholder="Contoh: -6.2000, 106.8167"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out" />
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <mat-tab> <ng-template mat-tab-label>
+            <div class="flex items-center space-x-2 py-3 px-5 transition-colors duration-200 ease-in-out group">
+              <mat-icon class="text-indigo-600 group-hover:text-indigo-700">login</mat-icon>
+              <span class="font-semibold text-gray-700 group-hover:text-gray-800">Login</span>
+            </div>
+          </ng-template>
+
+          <div class="bg-white rounded-b-lg p-6 md:p-8 space-y-6 border border-gray-200 border-t-0">
+            <div class="space-y-1">
+              <label for="ccregMobilePhone" class="block text-sm font-medium text-gray-700">Mobile Number <span
+                  class="text-red-500">*</span></label>
+              <input type="text" formControlName="ccregMobilePhone" id="ccregMobilePhone"
+                placeholder="Enter active mobile number (e.g., 0812xxxx)"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregMobilePhone')?.invalid && RegisForm.get('ccregMobilePhone')?.touched}" />
+              <div *ngIf="RegisForm.get('ccregMobilePhone')?.errors?.['required'] && RegisForm.get('ccregMobilePhone')?.touched"
+                class="text-red-500 text-xs mt-1">
+                Mobile number is required.
+              </div>
+              <div *ngIf="RegisForm.get('ccregMobilePhone')?.errors?.['pattern'] && RegisForm.get('ccregMobilePhone')?.touched"
+                class="text-red-500 text-xs mt-1">
+                Invalid phone format. Example: (021)12345678.
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label for="ccregEmail" class="block text-sm font-medium text-gray-700">Email <span
+                  class="text-red-500">*</span></label>
+              <input type="email" formControlName="ccregEmail" id="ccregEmail" placeholder="Masukkan alamat email aktif"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregEmail')?.invalid && RegisForm.get('ccregEmail')?.touched}" />
+              <div *ngIf="RegisForm.get('ccregEmail')?.errors?.['required'] && RegisForm.get('ccregEmail')?.touched"
+                class="text-red-500 text-xs mt-1">
+                Email is required.
+              </div>
+              <div *ngIf="RegisForm.get('ccregEmail')?.errors?.['email'] && RegisForm.get('ccregEmail')?.touched"
+                class="text-red-500 text-xs mt-1">
+                Invalid email format.
+              </div>
+            </div>
+
+
+            <div class="space-y-1">
+                <label for="ccregPassword" class="block text-sm font-medium text-gray-700">Password <span
+                    class="text-red-500">*</span></label>
+                <input type="password" formControlName="ccregPassword" id="ccregPassword" placeholder="Masukkan password Anda"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                    [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('ccregPassword')?.invalid && RegisForm.get('ccregPassword')?.touched}" />
+                
+                <div *ngIf="RegisForm.get('ccregPassword')?.errors?.['required'] && RegisForm.get('ccregPassword')?.touched"
+                    class="text-red-500 text-xs mt-1">
+                    Password wajib diisi.
+                </div>
+                <div *ngIf="RegisForm.get('ccregPassword')?.errors?.['minlength'] && RegisForm.get('ccregPassword')?.touched"
+                    class="text-red-500 text-xs mt-1">
+                    Password minimal {{ RegisForm.get('ccregPassword')?.errors?.['minlength']?.requiredLength }} karakter.
+                </div>
+                <div *ngIf="RegisForm.get('ccregPassword')?.errors?.['passwordStrength'] && RegisForm.get('ccregPassword')?.touched"
+                    class="text-red-500 text-xs mt-1">
+                    {{ RegisForm.get('ccregPassword')?.errors?.['passwordStrength'] }}
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <label for="ccregReconfirmPassword" class="block text-sm font-medium text-gray-700">Password confirmation<span
+                    class="text-red-500">*</span></label>
+                <input type="password" formControlName="ccregReconfirmPassword" id="ccregReconfirmPassword" placeholder="Ketik ulang password Anda"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                    [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': (RegisForm.get('ccregReconfirmPassword')?.invalid && RegisForm.get('ccregReconfirmPassword')?.touched) || (RegisForm.errors?.['passwordMismatch'] && RegisForm.get('ccregReconfirmPassword')?.touched) }" />
+                
+                <div *ngIf="RegisForm.get('ccregReconfirmPassword')?.errors?.['required'] && RegisForm.get('ccregReconfirmPassword')?.touched"
+                    class="text-red-500 text-xs mt-1">
+                    Password confirmation is required.
+                </div>
+                <div *ngIf="RegisForm.errors?.['passwordMismatch'] && RegisForm.get('ccregReconfirmPassword')?.touched && !RegisForm.get('ccregReconfirmPassword')?.errors?.['required']"
+                    class="text-red-500 text-xs mt-1">
+                    Passwords do not match.
+                </div>
+            </div>
+
+            <div class="space-y-1">
+              <label for="otp" class="block text-sm font-medium text-gray-700">OTP Code <span
+                  class="text-red-500">*</span></label>
+              <div class="flex items-stretch space-x-3">
+                <input type="text" formControlName="otp" id="otp" placeholder="Masukkan kode OTP (6 digit)" maxlength="6"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-shadow duration-150 ease-in-out"
+                  [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-500': RegisForm.get('otp')?.invalid && RegisForm.get('otp')?.touched}" />
+                   <div *ngIf="RegisForm.get('otp')?.errors?.['required'] && RegisForm.get('otp')?.touched"
+                    class="text-red-500 text-xs mt-1">
+                    OTP Code is required.
+                  </div>
+                  <div *ngIf="RegisForm.get('otp')?.errors?.['pattern'] && RegisForm.get('otp')?.touched && !RegisForm.get('otp')?.errors?.['required']"
+                    class="text-red-500 text-xs mt-1">
+                    OTP Code must be 6 digits.
+                  </div>
+                  <div *ngIf="RegisForm.get('otp')?.errors?.['otpMismatch'] && RegisForm.get('otp')?.touched"
+                    class="text-red-500 text-xs mt-1">
+                    The OTP code is incorrect. Please try again.
+                  </div>
+                <button type="button" mat-flat-button color="accent" (click)="sendEmail()"
+                  [disabled]="!RegisForm.get('ccregEmail')?.valid || RegisForm.get('ccregEmail')?.pending"
+                  class="px-4 py-2 rounded-md bg-indigo-600 text-white shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex-shrink-0 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-150 ease-in-out">
+                  <mat-icon class="mr-1 align-middle text-sm">send</mat-icon>Send OTP
+                  </button>
+              </div>
+              <div *ngIf="RegisForm.get('otp')?.errors?.['required'] && RegisForm.get('otp')?.touched"
+                class="text-red-500 text-xs mt-1">
+                OTP Code is required.
+              </div>
+                <div *ngIf="RegisForm.get('otp')?.errors?.['pattern'] && RegisForm.get('otp')?.touched && !RegisForm.get('otp')?.errors?.['required']"
+                class="text-red-500 text-xs mt-1">
+                OTP Code must be 6 digits.
+              </div>
+            </div>
+
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+
+    <div class="pt-8 text-center space-x-4">
+      <button type="button" mat-flat-button color="primary" (click)="saveRegis()" [disabled]="RegisForm.invalid"
+        class="px-8 py-3 bg-green-600 text-white text-base rounded-lg shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all duration-150 ease-in-out hover:shadow-xl transform hover:scale-105">
+        <mat-icon class="mr-1 align-middle">save</mat-icon> Create Account
+      </button>
+    </div>
+  </form>
+</div>
+
+<ng-template #noDataBisnis>
+  <div class="text-center text-gray-500 py-6 px-4 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+    <mat-icon class="text-4xl text-gray-400 mb-2">info_outline</mat-icon>
+    <p>No core business data to display or loading...</p>
+  </div>
+</ng-template>

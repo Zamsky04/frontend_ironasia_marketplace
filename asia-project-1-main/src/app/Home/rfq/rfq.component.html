@@ -1,0 +1,28 @@
+<div *ngIf="isLoading" class="text-center p-8">
+  <p>Loading content...</p>
+</div>
+
+<div *ngIf="!isLoading" class="bg-white">
+  <div class="flex items-center gap-4 p-5 bg-purple-50 border-b border-purple-200">
+    <div class="flex-shrink-0 bg-purple-100 p-3 rounded-full">
+      <i class="pi pi-file-edit text-2xl text-purple-700"></i>
+    </div>
+    <div>
+      <h2 class="text-xl font-bold text-purple-800">
+        Request For Quotation
+      </h2>
+      <p class="text-sm text-purple-600">
+        Informasi mengenai proses pengajuan penawaran harga.
+      </p>
+    </div>
+  </div>
+
+  <div [innerHTML]="rfqContent" class="prose max-w-none p-6"></div>
+  
+  <div class="text-xl p-4 bg-gray-50 border-t border-gray-200">
+    <button class="w-full flex justify-center py-2 px-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-purple-500 transition duration-150 ease-in-out"
+      (click)="closeForm()">
+      Close
+    </button>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+export interface newarrivals{
+newarrivalRequestNo: string,
+newarrivalSeqNo: number,
+newarrivalProductCode: number,
+newarrivalProductName: string,
+newarrivalProductTypeCode: number,
+newarrivalProductTypeName: string,
+newarrivalProductPrice: number,
+newarrivalProductDesc: string,
+newarrivalProductAlias: string,
+newarrivalProductSize: string,
+newarrivalProductSpec: string,
+newarrivalProductStock: number,
+newarrivalProductMinPurc: number,
+newarrivalProductImage1: string,
+newarrivalProductImage2: string,
+newarrivalProductImage3: string,
+newarrivalProductImage4: string,
+newarrivalSuppNo: string,
+newarrivalAreaName: string,
+newarrivalProvinsi: string,
+newarrivalCity: string
+}

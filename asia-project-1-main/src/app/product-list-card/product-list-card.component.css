@@ -1,0 +1,9 @@
+:host ::ng-deep .product-price {
+    font-family: var(--fontFamily);
+  }
+  
+  :host ::ng-deep .title-card {
+    font-size: 0.9rem;
+    font-family: var(--fontFamily);
+  }
+  

@@ -1,0 +1,51 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.address-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  margin-bottom: 16px;
+}
+
+.address-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.address-card p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.utama-badge {
+  background-color: #d1fae5;
+  color: #065f46;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+mat-form-field {
+  background-color: #f9fafb;
+  border-radius: 6px;
+}
+
+mat-form-field.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-color: #d1d5db;
+}
+

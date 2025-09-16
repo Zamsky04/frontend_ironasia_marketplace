@@ -1,0 +1,31 @@
+<app-header-nav></app-header-nav>
+<nav></nav>
+
+<!-- Judul Utama -->
+<div class="max-w-6xl mx-auto mb-6">
+  <h2 class="text-2xl font-semibold text-gray-800">
+    Menu Customer Profile
+  </h2>
+</div>
+
+<!-- Tab Container -->
+<div class="max-w-6xl mx-auto">
+  <mat-tab-group
+    [selectedIndex]="selectedTabIndex"
+    (selectedIndexChange)="selectTab(tabs[$event].key)"
+    class="custom-tab-group"
+  >
+    <mat-tab *ngFor="let tab of tabs">
+      <ng-template mat-tab-label>
+        <mat-icon class="mr-2">person</mat-icon> {{ tab.label }}
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<!-- Tab Content -->
+<div class="mt-6 max-w-6xl mx-auto">
+  <app-cust-profile *ngIf="selectedTab === 'a'"></app-cust-profile>
+  <app-cust-address-list *ngIf="selectedTab === 'b'"></app-cust-address-list>
+  <app-change-passwordweb *ngIf="selectedTab === 'c'"></app-change-passwordweb>
+</div>

@@ -1,0 +1,15 @@
+.custom-tab-group {
+  background-color: #f9fafb;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.mat-tab-label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.mat-tab-label-active {
+  color: #1d4ed8;
+  border-bottom: 2px solid #1d4ed8;
+}

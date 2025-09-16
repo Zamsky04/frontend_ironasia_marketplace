@@ -1,0 +1,84 @@
+
+
+<div class="bg-gray-100 min-h-screen">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg mb-8">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div class="flex-shrink-0">
+            <img src="/assets/ialogo_awal.png" alt="Company Logo" class="h-12 md:h-14 lg:h-16 w-auto"> </div>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Quotation Responses</h1>
+                <p class="text-sm text-gray-500 mt-1">View and manage responses for your inquiries.</p>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
+      <div class="lg:w-1/4 w-full">
+        <div class="bg-white p-5 rounded-xl shadow-lg lg:sticky lg:top-24"> <img src="/assets/Note 5.jpg" alt="Contextual Information" class="rounded-lg w-full h-auto object-cover mb-4 shadow-md">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Quick Info</h3>
+          <p class="text-sm text-gray-600">
+            This section can display helpful tips, summary statistics, or relevant images for the quotation process.
+          </p>
+        </div>
+      </div>
+
+      <div class="lg:w-3/4 w-full">
+        <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
+          <div class="mb-5">
+            <mat-form-field appearance="fill" class="w-full sm:w-2/3 md:w-1/2"> <mat-label>Filter Quotations</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Search by No, Status, etc." #input>
+              <mat-icon matSuffix class="text-gray-400">search</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table mat-table [dataSource]="dataSource" matSort class="min-w-full">
+              <ng-container matColumnDef="quoNo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Inquiry No.</th>
+            <td mat-cell *matCellDef="let row" class="font-semibold text-indigo-600">{{row.vmrppQuoNo}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="quoDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+            <td mat-cell *matCellDef="let row">{{row.vmrppQuoDate | date:'dd MMM yyyy'}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="totalProduct">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Products</th>
+            <td mat-cell *matCellDef="let row">{{row.vmrppTotalProduct}}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="totalSupplier">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Offers Received</th>
+            <td mat-cell *matCellDef="let row" class="font-bold text-gray-800">{{row.vmrppTotalSupplier}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let row">
+              <button (click)="viewDetails(row)" mat-flat-button color="primary">
+                View Offers
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50"></tr>
+          
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell text-center py-8 text-gray-500" [attr.colspan]="displayedColumns.length">
+              No data matching the filter "{{input.value}}".
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of inquiries"></mat-paginator>
+    </div>
+  </div>
+</div>

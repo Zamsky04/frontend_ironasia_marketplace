@@ -1,0 +1,68 @@
+<div *ngIf="contact$ | async as contact; else loading" class="bg-white rounded-2xl shadow-xl max-w-4xl mx-auto overflow-hidden">
+  
+  <div class="flex items-center justify-between p-6 border-b bg-slate-50">
+    <div class="flex items-center gap-4">
+      <img src="/img/logo.png" alt="Logo" class="h-10 w-auto">
+      <div>
+        <h2 class="text-xl font-bold text-gray-800 tracking-tight">{{ contact.vmgcSuppName }}</h2>
+        <p class="text-sm text-gray-500">Seller Contact Information</p>
+      </div>
+    </div>
+
+    <button (click)="close()" class="text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full p-2">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="grid md:grid-cols-3">
+    <div class="p-8 md:col-span-1">
+      <div class="space-y-5">
+        <div class="flex items-start">
+          <mat-icon class="text-indigo-500 mt-1 mr-4">person</mat-icon>
+          <div>
+            <h3 class="font-semibold text-gray-700">PIC</h3>
+            <p class="text-gray-600">{{ contact.vmgcSuppPic }}</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <mat-icon class="text-indigo-500 mt-1 mr-4">phone</mat-icon>
+          <div>
+            <h3 class="font-semibold text-gray-700">Handphone</h3>
+            <p class="text-gray-600">{{ contact.vmgcSuppHandphone || 'Tidak tersedia' }}</p>
+            <a [href]="'tel:' + contact.vmgcSuppHandphone" class="mt-2 inline-block bg-green-500 text-white text-xs font-bold py-2 px-4 rounded-full hover:bg-green-600 transition-colors">
+              Hubungi Sekarang
+            </a>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <mat-icon class="text-indigo-500 mt-1 mr-4">location_on</mat-icon>
+          <div>
+            <h3 class="font-semibold text-gray-700">Address</h3>
+            <p class="text-gray-600 leading-relaxed">
+              {{ contact.vmgcSuppAddress }}, <br>
+              {{ contact.vmgcSuppKecamatan }}, {{ contact.vmgcSuppCity }}, <br>
+              {{ contact.vmgcSuppProvinsi }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-8 md:col-span-2 border-l bg-slate-50">
+      <h3 class="text-lg font-semibold text-gray-700 flex items-center">
+        <mat-icon class="text-amber-500 mr-3">warning</mat-icon>
+        Disclaimer
+      </h3>
+      <div class="mt-4 p-4 border rounded-lg bg-white max-h-80 overflow-y-auto">
+        <p class="text-xs text-gray-600 leading-relaxed whitespace-pre-wrap">{{ contact.vmgcRedaktur }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="flex justify-center items-center p-20">
+    <p class="text-gray-500">Loading contact...</p>
+  </div>
+</ng-template>

@@ -1,0 +1,137 @@
+<p-drawer 
+  [(visible)]="visible"
+  [position]="isMobile ? 'full' : 'right'"
+  [modal]="true"
+  (onHide)="closeDrawer()"
+  styleClass="shop-drawer"
+  [style]="{ width: isMobile ? '100%' : '55rem' }"
+>
+  <ng-template pTemplate="header">
+    <div class="flex items-center gap-3 w-full">
+      <img [src]="product?.images?.[0]?.thumbnailImageSrc" alt="product" class="w-12 h-12 rounded-md object-cover border">
+      <div>
+        <h2 class="text-lg font-bold text-gray-800 leading-tight">{{ product?.dctwProductName }}</h2>
+        <p class="text-xs text-gray-500">{{ product?.dctwProducttypeName }}</p>
+      </div>
+    </div>
+  </ng-template>
+  
+  <ng-container *ngIf="product; else loadingState">
+    <div class="flex flex-col h-full bg-white">
+      
+      <div class="flex-grow overflow-y-auto p-4 sm:p-6">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+         <div class="lg:sticky lg:top-0 h-fit">
+    <p-galleria
+    [value]="product.images"
+    [showThumbnails]="false"
+    [showIndicators]="true"
+    [showIndicatorsOnItem]="true"
+    [containerStyle]="{ 'max-width': '100%' }"
+    [(activeIndex)]="activeIndex">  <ng-template pTemplate="item" let-item>
+      <img [src]="item.itemImageSrc" alt="Product Image" class="w-full block rounded-xl shadow-md" />
+    </ng-template>
+  </p-galleria>
+  </div>
+
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-2xl font-bold text-gray-800">{{ product.dctwProductTypeSpec }}</h3>
+              <div class="mt-3 flex items-baseline gap-3">
+                <span class="text-3xl font-extrabold text-indigo-600">
+                  {{ product.dctwProducttypePrice | currency:"IDR ":"symbol":"1.0-0" }}
+                </span>
+                <span *ngIf="product.dctwProducttypeStockQty < 10 && product.dctwProducttypeStockQty > 0" class="text-sm font-medium text-red-600">
+                  Only {{ product.dctwProducttypeStockQty }} left!
+                </span>
+              </div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-lg space-y-3">
+              <div class="flex items-start text-sm">
+                <i class="pi pi-box mt-0.5 text-slate-500 w-5 text-center mr-3"></i>
+                <div><span class="font-semibold text-slate-700">Stock:</span> {{ product.dctwProducttypeStockQty | number }} units available</div>
+              </div>
+              <div class="flex items-start text-sm">
+                <i class="pi pi-info-circle mt-0.5 text-slate-500 w-5 text-center mr-3"></i>
+                <div><span class="font-semibold text-slate-700">Min. Order:</span> {{ product.dctwProducttypeMinQty | number }} units</div>
+              </div>
+              <div class="flex items-start text-sm">
+                <i class="pi pi-map-marker mt-0.5 text-slate-500 w-5 text-center mr-3"></i>
+                <div><span class="font-semibold text-slate-700">Location:</span> {{ product.dctwProvince }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-gray-200">
+            <h4 class="text-lg font-semibold text-gray-800">Description</h4>
+            <div class="mt-2 text-sm text-gray-600 leading-relaxed prose max-w-none">
+                <p>{{ product.dctwProducttypeDesc }}</p>
+            </div>
+        </div>
+      </div>
+
+      <div class="sticky bottom-0 w-full bg-white p-4 border-t border-gray-200 shadow-inner mt-auto">
+        <div class="flex justify-between items-center mb-3">
+          <span class="text-lg font-semibold text-gray-700">Total Price:</span>
+          <span class="text-2xl font-bold text-indigo-600">{{ totalPrice | currency:"IDR ":"symbol":"1.0-0" }}</span>
+        </div>
+      
+        <div class="flex justify-between items-center mb-4">
+            <span class="text-md font-semibold text-gray-700">Quantity</span>
+            <p-inputNumber
+              [(ngModel)]="quantity"
+              [min]="product.dctwProducttypeMinQty"
+              [max]="product.dctwProducttypeStockQty"
+              [showButtons]="true"
+              buttonLayout="horizontal"
+              (onInput)="updateTotal()"
+              inputStyleClass="w-24 text-center font-bold"
+              styleClass="quantity-selector-modern"
+            >
+              <ng-template pTemplate="incrementbuttonicon"><span class="pi pi-plus"></span></ng-template>
+              <ng-template pTemplate="decrementbuttonicon"><span class="pi pi-minus"></span></ng-template>
+            </p-inputNumber>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-3">
+          <button 
+            pButton 
+            pRipple
+            type="button" 
+            label="Get Contact"
+            icon="pi pi-phone"
+            (click)="openContactDialog(product.dctwSupplierCode)"
+             pTooltip="Hubungi Supplier"
+                       appendTo="body" 
+                       tooltipPosition="top"
+            class="p-button-outlined p-button-secondary w-full">
+          </button>
+          <button
+            pButton
+            pRipple
+            type="button"
+            label="Add to Cart"
+            icon="pi pi-shopping-cart"
+            (click)="checkout()"
+             pTooltip="tambahkan ke keranjang"
+                       appendTo="body" 
+                       tooltipPosition="top"
+            [disabled]="quantity < product.dctwProducttypeMinQty || quantity > product.dctwProducttypeStockQty"
+            class="w-full">
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </ng-container>
+
+  <ng-template #loadingState>
+    <div class="flex items-center justify-center h-full">
+      <p>Loading product details...</p>
+    </div>
+  </ng-template>
+</p-drawer>

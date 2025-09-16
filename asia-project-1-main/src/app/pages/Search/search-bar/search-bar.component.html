@@ -1,0 +1,51 @@
+<div class="bg-gray-50 min-h-screen">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="flex items-center gap-4 mb-8">
+      <img src="/assets/ialogo_awal.png" alt="Company Logo" class="h-16 w-auto">
+      <div>
+        <p class="text-sm font-medium text-indigo-600">Search Results</p>
+        <h1 class="text-3xl font-bold text-gray-900">
+          For: '{{ currentSearchTerm || '...' }}'
+        </h1>
+      </div>
+    </div>
+
+   
+    
+    <main class="w-full">
+      <ng-container *ngIf="results$ | async as result">
+
+        <div *ngIf="result.isLoading" class="text-center py-20">
+          <p>Loading results...</p>
+        </div>
+
+        <div *ngIf="!result.isLoading">
+          <div *ngIf="result.error" class="bg-red-100 p-4 rounded-lg text-red-700">
+            <p>{{ result.error }}</p>
+          </div>
+
+          <div *ngIf="!result.error && result.data?.length === 0" class="text-center py-20 bg-white rounded-xl shadow-sm">
+            <h3 class="text-xl font-semibold text-gray-800">No Products Found</h3>
+            <p class="text-gray-500 mt-2">Try adjusting your search term.</p>
+          </div>
+
+          <div *ngIf="!result.error && result.data && result.data.length > 0">
+            <app-product-list-search
+                [products]="result.data"
+                (shopNowClicked)="openShopDrawer($event)">
+            </app-product-list-search>
+          </div>
+        </div>
+
+      </ng-container>
+    </main>
+    
+    <app-shop-drawer
+        [(visible)]="showDrawer"
+        [product]="selectedProduct"
+        (close)="closeShopDrawer()">
+    </app-shop-drawer>
+
+  </div>
+</div>

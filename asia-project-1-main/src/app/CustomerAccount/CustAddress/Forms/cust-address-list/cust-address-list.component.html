@@ -1,0 +1,44 @@
+<div class="p-4 space-y-4 max-w-screen-md mx-auto">
+  <mat-toolbar color="primary">
+    <span>Customer Address</span>
+    <span class="spacer"></span>
+    <!--<button mat-raised-button color="accent" (click)="openAddAddressDialog('Insert','','')"> + Tambah Alamat Baru</button>-->
+  </mat-toolbar>
+
+  <!-- 🔍 Filter Alamat Modern -->
+  <!--<mat-form-field appearance="outline" class="w-full my-4">
+    <mat-label>Filter alamat</mat-label>
+    <input
+      matInput
+      [(ngModel)]="searchText"
+      (keyup)="applyFilter($event)"
+      placeholder="Cari alamat..."
+    />
+    <button *ngIf="searchText" mat-icon-button matSuffix (click)="clearFilter()" aria-label="Clear">
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-icon matSuffix *ngIf="!searchText">search</mat-icon>
+  </mat-form-field>-->
+
+  <div *ngIf="dataSource?.filteredData?.length === 0" class="text-center text-gray-500 mt-8">
+    Belum ada alamat yang tersimpan.
+  </div>
+
+  <!-- ✅ Tampilan kartu alamat -->
+  <div *ngFor="let address of dataSource.filteredData" class="address-card">
+    <h3>{{ address.vcaCustName || 'Nama Pelanggan' }}  ({{ formatPhoneWithSpaces(address.vcaHandphone) || 'Nomor HP' }})</h3>
+    <p>{{ address.vcaAddr }}, RT {{ address.vcaRt }}/RW {{ address.vcaRw }}</p>
+    <p>{{ address.vcaKelurahan }}, {{ address.vcaKecamatan }}, {{ address.vcaCity }}</p>
+    <p>{{ address.vcaProvinsi }}, {{ address.vcaZipCode }}</p>
+    <p> Area : {{ address.vcaAreaName }}</p>
+    <span *ngIf="address.isMain" class="utama-badge">Utama</span>
+
+    <div class="actions">
+      <button mat-button color="primary" (click)="openAddAddressDialog('Update',address.vcaAddrId,address.vcaProvCode)">Ubah</button>
+      <!--<button mat-button color="warn" (click)="deleteAddress(address)">Hapus</button>-->
+      <!--<button mat-button color="accent" (click)="setAsPrimary(address)">Atur sebagai utama</button>-->
+    </div>
+  </div>
+
+  <!--<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>-->
+</div>

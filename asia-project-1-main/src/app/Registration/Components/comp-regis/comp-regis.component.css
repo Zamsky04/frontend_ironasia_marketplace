@@ -1,0 +1,75 @@
+.icon-container {
+    width: 100px; /* Atau lebar tetap lainnya */
+    overflow-x: auto; 
+  }
+  
+  .icon-list {
+    display: flex; 
+    white-space: nowrap; /* Mencegah ikon berpindah baris */
+  }
+  
+  .icon {
+    margin-right: 10px; /* Atur jarak antar ikon */
+  }
+
+  .mat-mdc-select-panel {
+    background-color: white !important; /* Ganti white dengan warna latar tema Anda jika berbeda (misal: #fff atau variabel SASS) */
+    /* Anda mungkin juga perlu menambahkan sedikit shadow atau border agar terlihat terpisah */
+     box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+                 0px 8px 10px 1px rgba(0, 0, 0, 0.14),
+                 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+     border: 1px solid rgba(0, 0, 0, 0.1); /* Border tipis jika perlu */
+  }
+  
+  /* Pastikan opsi di dalamnya juga tidak transparan (biasanya sudah, tapi untuk jaga-jaga) */
+  .mat-mdc-option {
+     /* background-color: transparent; */ /* Pastikan tidak ada override jadi transparan */
+     /* color: initial; */ /* Pastikan warna teks terlihat */
+  }
+
+ ::ng-deep .cdk-overlay-pane {
+  /* Pastikan panel ini memiliki latar belakangnya sendiri */
+  /* Beberapa kasus membutuhkan ini jika panel itu sendiri transparan by default */
+}
+
+/* Target panel mat-select secara lebih spesifik */
+::ng-deep .mat-select-panel.mat-primary { /* Atau .mat-accent, .mat-warn tergantung tema Anda, atau hilangkan jika tidak yakin */
+  background-color: white !important;
+  border: 1px solid #ccc; /* Tambahkan border agar lebih jelas terlihat */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important; /* Bayangan yang lebih tegas */
+  z-index: 1050 !important; /* Pastikan di atas elemen lain, sesuaikan jika perlu */
+}
+
+/* Alternatif jika kelas tema (.mat-primary) tidak bekerja atau tidak diketahui */
+::ng-deep .mat-select-panel {
+  background-color: white !important;
+  border: 1px solid #ccc; /* Tambahkan border agar lebih jelas terlihat */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  z-index: 1050 !important; /* Pastikan di atas elemen lain, sesuaikan jika perlu */
+}
+
+
+/* Opsional: Styling untuk opsi di dalam panel */
+::ng-deep .mat-select-panel .mat-option {
+  color: #212529 !important; /* Warna teks yang lebih gelap agar kontras */
+  padding: 10px 16px !important; /* Sedikit padding tambahan */
+}
+
+::ng-deep .mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple) {
+  background-color: #e9ecef !important; /* Warna latar yang sedikit berbeda untuk item terpilih */
+  color: #007bff !important; /* Warna teks untuk item terpilih */
+  font-weight: 600; /* Membuat teks item terpilih sedikit tebal */
+}
+
+::ng-deep .mat-select-panel .mat-option:hover:not(.mat-option-disabled),
+::ng-deep .mat-select-panel .mat-option:focus:not(.mat-option-disabled) {
+  background-color: #f8f9fa !important; /* Warna latar saat hover/focus */
+}
+
+/* Jika ada backdrop, pastikan tidak mengganggu */
+::ng-deep .cdk-overlay-backdrop {
+  /* Anda bisa mengatur transparansi backdrop di sini jika perlu */
+  /* background-color: rgba(0, 0, 0, 0.1) !important; */
+}

@@ -1,0 +1,131 @@
+<div class="bg-gray-100 min-h-screen font-sans">
+<header class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      
+      <h1 class="text-xl sm:text-2xl font-bold text-indigo-700">
+        Request Details <span *ngIf="p_reqno">- {{ p_reqno }}</span>
+      </h1>
+
+      <div class="flex items-center gap-4">
+        <button
+          *ngIf="p_status === 'SQ'"
+          (click)="SentRequest()"
+          class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700">
+          <mat-icon class="!w-5 !h-5 mr-2">send</mat-icon>
+          Send Request
+        </button>
+
+        <button 
+          (click)="closeDialog()"
+          aria-label="Close Dialog"
+          class="text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-full p-2 transition-colors duration-200">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div *ngIf="!requestList || requestList.length === 0" class="text-center py-12">
+      <h3 class="mt-2 text-lg font-medium text-gray-900">No Request Items Found</h3>
+      <p class="mt-1 text-sm text-gray-500">There are no items to display for this request.</p>
+    </div>
+
+    <div class="space-y-6">
+      <div *ngFor="let item of requestList"
+        class="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl border border-gray-200">
+        
+        <div class="flex flex-col md:flex-row">
+          
+          <div class="md:w-5/12 p-4 sm:p-6 bg-slate-50 md:border-r border-gray-200">
+            <div class="space-y-3">
+              <a [href]="item.requestProductImage1" target="_blank" class="block">
+                <div class="aspect-w-1 aspect-h-1 w-full bg-white rounded-lg border flex items-center justify-center overflow-hidden shadow-inner">
+                  <img [src]="item.requestProductImage1" [alt]="item.requestProductName" class="max-w-full max-h-full object-contain p-1 transition-transform duration-300 hover:scale-105">
+                </div>
+              </a>
+              <div class="grid grid-cols-3 gap-3">
+                <a *ngIf="item.requestProductImage2" [href]="item.requestProductImage2" target="_blank" class="block">
+                  <div class="aspect-w-1 aspect-h-1 bg-white rounded border flex items-center justify-center overflow-hidden hover:ring-2 hover:ring-indigo-500 transition-all cursor-pointer">
+                    <img [src]="item.requestProductImage2" alt="Thumbnail 2" class="max-w-full max-h-full object-cover">
+                  </div>
+                </a>
+                <a *ngIf="item.requestProductImage3" [href]="item.requestProductImage3" target="_blank" class="block">
+                  <div class="aspect-w-1 aspect-h-1 bg-white rounded border flex items-center justify-center overflow-hidden hover:ring-2 hover:ring-indigo-500 transition-all cursor-pointer">
+                    <img [src]="item.requestProductImage3" alt="Thumbnail 3" class="max-w-full max-h-full object-cover">
+                  </div>
+                </a>
+                <a *ngIf="item.requestProductImage4" [href]="item.requestProductImage4" target="_blank" class="block">
+                  <div class="aspect-w-1 aspect-h-1 bg-white rounded border flex items-center justify-center overflow-hidden hover:ring-2 hover:ring-indigo-500 transition-all cursor-pointer">
+                    <img [src]="item.requestProductImage4" alt="Thumbnail 4" class="max-w-full max-h-full object-cover">
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:w-7/12 p-4 sm:p-6 flex flex-col">
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mt-1">{{item.requestProductName || 'N/A'}}</h2>
+              <span class="text-xs font-semibold text-indigo-600 uppercase">{{item.requestProductTypeName || 'N/A'}}</span>
+              <p class="text-gray-500 text-sm mt-1">{{item.requestProductAlias || '-'}}</p>
+            </div>
+            
+            <div class="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-2">
+                <div class="flex flex-col">
+                    <span class="text-xs text-gray-500">Price</span>
+                    <span class="text-2xl font-bold text-green-600">IDR {{item.requestProductPrice | number:'1.0-0'}}</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs text-gray-500">Stock</span>
+                    <span class="text-lg font-semibold text-gray-700">{{item.requestProductStock | number:'1.0-0'}}</span>
+                </div>
+                 <div class="flex flex-col">
+                    <span class="text-xs text-gray-500">Min. Purchase</span>
+                    <span class="text-lg font-semibold text-gray-700">{{item.requestProductMinPurc | number:'1.0-0'}}</span>
+                </div>
+
+               
+            </div>
+             <div class="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-2">
+             <div class="flex flex-col">
+                       <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-wrap"><b>Specifications:</b> {{item.requestProductSpec || '-'}}</p>
+                </div>
+         </div>
+            <div class="mt-auto pt-6 text-right">
+              <button
+                *ngIf="p_status === 'SQ'"
+                (click)="updateRequest('update', item.requestSeqNo)"
+                class="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+                <mat-icon class="!w-5 !h-5 mr-2">edit</mat-icon>
+                Update Item
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 sm:p-6 border-t border-gray-200">
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-md font-semibold text-gray-700 mb-2">Description</h3>
+                
+                    <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-wrap mt-2"> {{item.requestProductDesc || '-'}}</p>
+                </div>
+                <div *ngIf="p_status !== 'SQ' && p_status !== 'SD'">
+                    <h3 class="text-md font-semibold text-gray-700 mb-2">Notes for this Item</h3>
+                    <textarea 
+                      [(ngModel)]="item.requestNote" [disabled]="true"
+                      class="w-full p-3 border bg-gray-100 border-gray-300 rounded-md text-sm"
+                      rows="3">
+                    </textarea>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>

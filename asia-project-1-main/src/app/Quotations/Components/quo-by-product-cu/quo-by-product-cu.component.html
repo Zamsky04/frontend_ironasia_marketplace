@@ -1,0 +1,177 @@
+<div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4 text-center text-blue-700">Quotation By Catalog - {{p_quono}} - {{p_no}}</h1>
+    
+    <form (ngSubmit)="submitRequest()"  #quoteForm="ngForm" enctype="multipart/form-data">
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                <h2 class="text-xl font-semibold mb-2">Product</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="mb-4">
+                        <label for="pr" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an
+                            option *</label>
+                        <select id="selectedprod" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                [(ngModel)]="selectedprod" 
+                                (ngModelChange)="changeproduct()" 
+                                name="selectedprod"
+                                #productSelect="ngModel" 
+                                required
+                                [ngClass]="{ 'border-red-500': productSelect.invalid && productSelect.touched }">
+                            <option [ngValue]="0" disabled>-- Pilih Product --</option>
+                            <option *ngFor="let prod of prodlist" [ngValue]="prod.cmprCode">{{ prod.cmprName }}</option>
+                        </select>
+                        <div *ngIf="productSelect.invalid && (productSelect.touched || productSelect.dirty)" class="text-red-600 text-sm mt-1">
+                            Product Cannot be empty.
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="ctqdProductName" class="block text-gray-700 font-bold mb-2">Manual Product</label>
+                        <input type="text" id="ctqdProductName" [(ngModel)]="data.ctqdProductName" name="ctqdProductName"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Manual Produk">
+                    </div>
+                </div>
+
+                <h2 class="text-xl font-semibold mb-2">Product Type</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="mb-4">
+                        <label for="prt" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an
+                            option *</label>
+                        <select id="selectedprodtype" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                [(ngModel)]="selectedprodtype" 
+                                (ngModelChange)="changeproducttype()" 
+                                name="selectedprodtype"
+                                #productTypeSelect="ngModel" 
+                                required
+                                [ngClass]="{ 'border-red-500': productTypeSelect.invalid && productTypeSelect.touched }">
+                            <option [ngValue]="0" disabled>-- Pilih Product Type --</option>
+                            <option *ngFor="let prodty of prodtylist" [ngValue]="prodty.cmprtCode">{{ prodty.cmprtTypeDesc }}</option>
+                        </select>
+                         <div *ngIf="productTypeSelect.invalid && (productTypeSelect.touched || productTypeSelect.dirty)" class="text-red-600 text-sm mt-1">
+                            Product Type Cannot be empty.
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="ctqdProducttypeName" class="block text-gray-700 font-bold mb-2">Manual Product Type</label>
+                        <input type="text" id="ctqdProducttypeName" [(ngModel)]="data.ctqdProducttypeName" name="ctqdProducttypeName"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Manual Tipe Produk">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="mb-4">
+                        <label for="ctqdProductTypeAlias" class="block text-gray-700 font-bold mb-2">Alias</label>
+                        <input type="text" id="ctqdProductTypeAlias" [(ngModel)]="data.ctqdProductTypeAlias" name="ctqdProductTypeAlias"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Alias">
+                    </div>
+                    <div class="mb-4">
+                        <label for="ctqdProducttypeQty" class="block text-gray-700 font-bold mb-2">Quantity</label>
+                        <input type="text" id="ctqdProducttypeQty" [(ngModel)]="data.ctqdProducttypeQty" name="ctqdProducttypeQty"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Stock">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="mb-4">
+                        <label for="ctqdProducttypePrice" class="block text-gray-700 font-bold mb-2">Price </label>
+                        <input type="text" id="ctqdProducttypePrice" [(ngModel)]="data.ctqdProducttypePrice" name="ctqdProducttypePrice"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Harga">
+                    </div>
+                   <!-- <div class="mb-4">
+                        <label for="ctqdProducttypeMinQty" class="block text-gray-700 font-bold mb-2">Min Quantity</label>
+                        <input type="text" id="ctqdProducttypeMinQty" [(ngModel)]="data.ctqdProducttypeMinQty" name="ctqdProducttypeMinQty"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Min. Penjualan">
+                    </div>-->
+                </div>
+
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="mb-4">
+                        <label for="ctqdProductTypeSize" class="block text-gray-700 font-bold mb-2">Size</label>
+                        <input type="text" id="ctqdProductTypeSize" [(ngModel)]="data.ctqdProductTypeSize" name="ctqdProductTypeSize"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Ukuran Product">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="mb-4">
+                        <label for="ctqdProductTypeSpec" class="block text-gray-700 font-bold mb-2">Detail Specification</label>
+                        <textarea id="ctqdProductTypeSpec" [(ngModel)]="data.ctqdProductTypeSpec" name="ctqdProductTypeSpec"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline resize-none"
+                            placeholder="Spesifikasi Detail" style="height: calc(4rem + 8px);"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mx-auto mt-6 px-4">
+                <h2 class="text-2xl font-bold text-center mb-6">Image Upload</h2>
+                <div class="bg-white shadow-lg rounded-lg p-6">
+                    <div class="grid grid-cols-2 gap-8 mb-6">
+                        <div class="relative flex flex-col items-center space-y-3">
+                            <label class="cursor-pointer">
+                                <input type="file" accept="image/*" id="file1" name="file1" class="hidden" (change)="onFileSelected($event, 1)">
+                                <div class="relative w-full h-52 flex items-center justify-center border rounded-lg bg-gray-200 overflow-hidden" *ngIf="!preview">
+                                    <span class="text-gray-400">No Image</span>
+                                </div>
+                                <img [src]="preview" *ngIf="preview" alt="Image Preview1" class="object-contain w-full h-52 rounded-lg">
+                            </label>
+                            <span class="text-sm text-gray-500">Image Preview 1</span>
+                        </div>
+                        <div class="relative flex flex-col items-center space-y-3">
+                            <label class="cursor-pointer">
+                                <input type="file" accept="image/*" id="file2" name="file2" class="hidden" (change)="onFileSelected($event, 2)">
+                                <div class="relative w-full h-52 flex items-center justify-center border rounded-lg bg-gray-200 overflow-hidden" *ngIf="!preview2">
+                                    <span class="text-gray-400">No Image</span>
+                                </div>
+                                <img [src]="preview2" *ngIf="preview2" alt="Image Preview2" class="object-contain w-full h-52 rounded-lg">
+                            </label>
+                            <span class="text-sm text-gray-500">Image Preview 2</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div class="relative flex flex-col items-center space-y-3">
+                            <label class="cursor-pointer">
+                                <input type="file" accept="image/*" id="file3" name="file3" class="hidden" (change)="onFileSelected($event, 3)">
+                                <div class="relative w-full h-52 flex items-center justify-center border rounded-lg bg-gray-200 overflow-hidden" *ngIf="!preview3">
+                                    <span class="text-gray-400">No Image</span>
+                                </div>
+                                <img [src]="preview3" *ngIf="preview3" alt="Image Preview3" class="object-contain w-full h-52 rounded-lg">
+                            </label>
+                            <span class="text-sm text-gray-500">Image Preview 3</span>
+                        </div>
+                        <div class="relative flex flex-col items-center space-y-3">
+                            <label class="cursor-pointer">
+                                <input type="file" accept="image/*" id="file4" name="file4" class="hidden" (change)="onFileSelected($event, 4)">
+                                <div class="relative w-full h-52 flex items-center justify-center border rounded-lg bg-gray-200 overflow-hidden" *ngIf="!preview4">
+                                    <span class="text-gray-400">No Image</span>
+                                </div>
+                                <img [src]="preview4" *ngIf="preview4" alt="Image Preview4" class="object-contain w-full h-52 rounded-lg">
+                            </label>
+                            <span class="text-sm text-gray-500">Image Preview 4</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-5">
+            <div class="mb-4">
+                <label for="ctqdProducttypeDesc" class="block text-gray-700 font-bold mb-2">Description</label>
+                <textarea id="ctqdProducttypeDesc" [(ngModel)]="data.ctqdProducttypeDesc" name="ctqdProducttypeDesc"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline resize-none"
+                    placeholder="Penjelasan Produk" style="height: calc(4rem + 50px);"></textarea>
+            </div>
+        </div>
+        
+        <button type="submit" 
+                class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded text-sm disabled:bg-gray-400 disabled:cursor-not-allowed"
+                [disabled]="quoteForm.invalid">
+            Send Quotation
+        </button>
+    </form>
+</div>

@@ -1,0 +1,82 @@
+<app-navbar></app-navbar>
+<app-carousel [items]="carouselItems"></app-carousel>
+<div class="container mx-auto px-6 py-3">
+  <h2 class="title text-center mb-6">Popular Categories</h2>
+  <div class="flex flex-wrap justify-center">
+    <app-categories-card
+      *ngFor="let item of showMore ? dtprdlist : dtprdlist.slice(0, 6)"
+      [item]="item"
+      class="w-full sm:w-1/2 lg:w-1/3 justify-center"
+    ></app-categories-card>
+  </div>
+  <div
+    *ngIf="dtprdlist.length > 6"
+    class="flex flex-col items-center mt-4">
+    <button
+      (click)="toggleShowMore()"
+      class="flex items-center justify-center w-10 h-10 rounded-full border-none bg-transparent" >
+      <i class="pi text-2xl"
+        [ngClass]="showMore ? 'pi-chevron-up' : 'pi-chevron-down'">
+      </i>
+    </button>
+  </div>
+</div>
+
+
+<div class="container mx-auto px-6 py-3">
+  <div class="w-full md:w-full flex">
+    <div class="w-1/2">
+      <app-product-carousel
+        [products]="toprankingsProductList"
+        [showIndicators]="false"
+        [numVisible]="3"
+        
+        title="Top Ranking"
+        desc="Explore the highest-rated and best-selling items trusted by thousands of happy shoppers. Quality you can count on."
+        [showNavigators]="false"
+        (shopNowClicked)="openShopDrawer($event)"
+        (viewMoreClicked)="navigateToSection($event)"
+      ></app-product-carousel>
+    </div>
+    <div class="w-1/2">
+      <app-product-carousel
+        [products]="newarrivalProductList"
+        [showIndicators]="false"
+        [numVisible]="3"
+        title="New Arrivals"
+        desc="Be the first to shop the latest trends and newest additions to our collection. Updated daily for the trendsetters."
+        [showNavigators]="false"
+        (shopNowClicked)="openShopDrawer($event)"
+        (viewMoreClicked)="navigateToSection($event)"
+      ></app-product-carousel>
+    </div>
+  </div>
+</div>
+<div class="container mx-auto px-6 py-3 flex flex-wrap items-center">
+  <div class="w-full md:w-full">
+    <app-product-carousel
+      [products]="topDealsProductList"
+      [showIndicators]="false"
+      [numVisible]="6"
+      title="Hot Deals"
+      desc="Discover exclusive discounts and limited-time deals on our most popular products. Shop now before they’re gone!"
+      [showNavigators]="false"
+      (shopNowClicked)="openShopDrawer($event)"
+      (viewMoreClicked)="navigateToSection($event)"
+    ></app-product-carousel>
+  </div>
+</div>
+<div class="container mx-auto px-6 py-3">
+  <div class="w-full md:w-full">
+    <app-product-list-card
+      [products]="productList"
+      (shopNowClicked)="openShopDrawer($event)"
+    ></app-product-list-card>
+  </div>
+</div>
+<app-shop-drawer
+  [(visible)]="showDrawer"
+  [product]="selectedProduct"
+  (close)="showDrawer = false"
+></app-shop-drawer>
+<app-footer></app-footer>

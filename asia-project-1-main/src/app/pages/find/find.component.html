@@ -1,0 +1,297 @@
+<div class="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900">
+  <div
+    class="w-4/5 md:w-72 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-4 transition-transform duration-300 ease-in-out md:translate-x-0 z-40 md:z-auto md:static fixed top-0 left-0 h-full md:h-auto overflow-y-auto shadow-lg md:shadow-none"
+    [ngClass]="{ '-translate-x-full': !sidebarVisible && !isDesktop, 'translate-x-0': sidebarVisible && !isDesktop }">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Filters</h2>
+      <button (click)="sidebarVisible = false"
+        class="md:hidden text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
+
+    <div class="mb-4">
+      <label class="block font-medium mb-1 text-sm text-gray-700 dark:text-gray-300">Sub Category</label>
+      <select
+        class="w-full border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-indigo-500 focus:border-indigo-500"
+        [(ngModel)]="selectedCategory" (ngModelChange)="onPrdTypeChange($event)">
+        <option [ngValue]="0">All</option>
+        <option *ngFor="let cat of categoryOptions" [value]="cat.value">
+          {{ cat.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="mb-4">
+      <label class="block font-medium mb-1 text-sm text-gray-700 dark:text-gray-300">Province</label>
+      <select
+        class="w-full border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-indigo-500 focus:border-indigo-500"
+        [(ngModel)]="selectedprov" (ngModelChange)="onProvinceChange($event)">
+        <option value="all">All</option>
+        <option *ngFor="let prov of ProvinceOptions" [value]="prov.provvalue">
+          {{ prov.provname }}
+        </option>
+      </select>
+    </div>
+
+    <div class="mb-4">
+      <label class="block font-medium mb-1 text-sm text-gray-700 dark:text-gray-300">City</label>
+      <select
+        class="w-full border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-indigo-500 focus:border-indigo-500"
+        [(ngModel)]="selectedCity" (ngModelChange)="onCityChange($event)"
+        [disabled]="!selectedprov || selectedprov === 'all' || cityOptions.length === 0">
+        <option value="all">All</option>
+        <option *ngFor="let city of cityOptions" [value]="city.cityvalue">
+          {{ city.cityname }}
+        </option>
+      </select>
+    </div>
+
+    <div class="mb-4">
+      <label class="block font-medium mb-1 text-sm text-gray-700 dark:text-gray-300">Area</label>
+      <input type="text"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-indigo-500 focus:border-indigo-500"
+        [(ngModel)]="varea" placeholder="e.g., Sudirman" />
+    </div>
+
+    <div class="mb-4">
+      <label class="block font-medium mb-1 text-sm text-gray-700 dark:text-gray-300">Max Price (IDR)</label>
+      <input type="number"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-indigo-500 focus:border-indigo-500"
+        [(ngModel)]="maxPrice" placeholder="e.g., 5000000" />
+    </div>
+
+    <button
+      class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      (click)="getMainProdCategoriesFilter()">
+      Apply Filters
+    </button>
+  </div>
+
+  <div class="flex-1 bg-gray-50 dark:bg-gray-800 p-0 md:p-4 min-w-0">
+    <div class="card bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden"> <p-dataview #dv
+        [value]="dtprdlist" [layout]="layout" [rows]="6" [paginator]="dtprdlist.length > 6">
+        <ng-template #header>
+          <div class="flex flex-col">
+            <div
+              class="flex items-center space-x-3 sm:space-x-4 px-4 py-3 sm:px-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+              <img [src]="prodimg || 'assets/noimage.jpg'" [alt]="prodname || 'Product Image'"
+                class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 object-contain rounded-md flex-shrink-0 shadow-sm border border-gray-100 dark:border-gray-600"
+                onError="this.src='assets/noimage.jpg'" />
+              <div class="flex-1 min-w-0">
+                <h2 class="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-100 truncate"
+                  [title]="prodname || 'Product Name Unavailable'">
+                  {{ prodname || 'Product Name Unavailable' }}
+                </h2>
+              </div>
+            </div>
+
+            <div *ngIf="dtprdtypelist && dtprdtypelist.length > 0"
+              class="py-1 px-2 sm:px-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 overflow-hidden">
+              <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1 px-2">Product Variations:</h3>
+              <p-carousel [value]="dtprdtypelist" 
+              [numVisible]="5" 
+              [numScroll]="1" 
+                [responsiveOptions]="carouselResponsiveOptions" [circular]="dtprdtypelist.length > 5"
+                [showIndicators]="dtprdtypelist.length > 5" styleClass="custom-carousel product-variations-carousel">
+                <ng-template let-type pTemplate="item">
+                  <div  (click)="getMainProdAndProdTypeCategories(type)"
+                    class="border border-gray-200 dark:border-gray-600 rounded-lg py-1 px-2 m-1 h-full flex flex-row items-center text-left bg-gray-50 dark:bg-gray-700/50 hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+                    <div class="flex-shrink-0 mr-2.5">
+                      <img *ngIf="type.prodtypeProductImage" [src]="type.prodtypeProductImage"
+                        [alt]="type.prodtypeTypeDesc" class="w-10 h-10 object-cover rounded-md shadow-sm"
+                        onError="this.src='assets/noimage.jpg'">
+                      <div *ngIf="!type.prodtypeProductImage"
+                        class="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-md flex items-center justify-center text-gray-500 dark:text-gray-400 shadow-sm"
+                        aria-label="No image available">
+                        <i class="pi pi-image" style="font-size: 1.25rem"></i>
+                      </div>
+                    </div>
+                    <div class="flex-grow min-w-0">
+                      <p class="text-sm font-medium text-gray-800 dark:text-gray-100 leading-snug truncate"
+                        [title]="type.prodtypeTypeDesc">
+                        {{ type.prodtypeTypeDesc }}
+                      </p>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-carousel>
+            </div>
+
+            <div class="flex items-center justify-end px-4 py-3 sm:px-6 bg-white dark:bg-gray-800">
+              <div class="flex items-center space-x-2">
+                <button type="button" (click)="layout = 'list'" [ngClass]="{
+                    'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 ring-1 ring-inset ring-indigo-200 dark:ring-indigo-700/50': layout === 'list',
+                    'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/60 hover:text-gray-700 dark:hover:text-gray-200': layout !== 'list'
+                  }"
+                  class="relative inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 dark:focus-visible:ring-offset-gray-900 transition-all duration-200 ease-in-out"
+                  aria-label="Display as list">
+                  <i class="pi pi-bars text-sm mr-1 sm:mr-0"></i>
+                  <span class="hidden sm:inline-block ml-1.5">List</span>
+                </button>
+                <button type="button" (click)="layout = 'grid'" [ngClass]="{
+                    'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 ring-1 ring-inset ring-indigo-200 dark:ring-indigo-700/50': layout === 'grid',
+                    'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/60 hover:text-gray-700 dark:hover:text-gray-200': layout !== 'grid'
+                  }"
+                  class="relative inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 dark:focus-visible:ring-offset-gray-900 transition-all duration-200 ease-in-out"
+                  aria-label="Display as grid">
+                  <i class="pi pi-th-large text-sm mr-1 sm:mr-0"></i>
+                  <span class="hidden sm:inline-block ml-1.5">Grid</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template #list let-items>
+          <div class="grid grid-cols-1">
+            <div *ngFor="let product of items; let first = first"
+              class="flex flex-col sm:flex-row sm:items-start p-4 gap-4 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-150"
+              [ngClass]="{ 'border-t border-gray-200 dark:border-gray-600': !first }">
+
+              <div class="w-full sm:w-32 md:w-36 lg:w-40 flex-shrink-0 mb-3 sm:mb-0 sm:mr-4 self-center sm:self-start">
+                <div
+                  class="bg-gray-100 dark:bg-gray-600 rounded flex items-center justify-center aspect-[4/3] overflow-hidden shadow">
+                  <img [src]="product.images?.[0]?.itemImageSrc || 'assets/noimage.jpg'"
+                    [alt]="product.dctwProductName || 'Product Image'" class="max-h-full max-w-full object-contain"
+                    onError="this.src='assets/noimage.jpg'" />
+                </div>
+              </div>
+
+              <div class="flex-1 flex flex-col justify-between min-w-0">
+                <div> <a href="#" (click)="$event.preventDefault(); openShopDrawer(product)"
+                    class="text-base lg:text-lg font-semibold text-gray-800 dark:text-gray-50 hover:text-[var(--primaryColor)] dark:hover:text-[var(--primaryColorLight)] transition line-clamp-2 mb-1"
+                    pTooltip="{{ product.dctwProductTypeSpec || product.dctwProductName }}" tooltipPosition="top">
+                    {{ product.dctwProductTypeSpec || product.dctwProductName || 'View Details' }}
+                  </a>
+
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">{{ product.dctwProducttypeName }}</p>
+
+                  <div
+                    class="flex flex-row flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-600 dark:text-gray-300 mb-2">
+                    <span class="flex items-center"
+                      *ngIf="product.dctwProducttypeStockQty && product.dctwProducttypeStockQty !== '0'">
+                      <i class="pi pi-box mr-1" pTooltip="Stock Available" tooltipPosition="top"></i>
+                      Stock: {{ product.dctwProducttypeStockQty }}
+                    </span>
+                    <span class="flex items-center"
+                      *ngIf="!product.dctwProducttypeStockQty || product.dctwProducttypeStockQty === '0'">
+                      <i class="pi pi-box mr-1 text-red-500" pTooltip="Out of Stock" tooltipPosition="top"></i>
+                      <span class="text-red-500">Out of Stock</span>
+                    </span>
+                    <span class="flex items-center">
+                      <i class="pi pi-info-circle mr-1" pTooltip="Minimum Order" tooltipPosition="top"></i>
+                      Min. Order: {{ product.dctwProducttypeMinQty || 'N/A' }}
+                    </span>
+                  </div>
+
+                  <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 mb-3 line-clamp-1">
+                    <i class="pi pi-map-marker mr-1" pTooltip="Location" tooltipPosition="top"></i>
+                    {{ product.dctwCity ? product.dctwCity + (product.dctwProvince ? ', ' + product.dctwProvince : '') :
+                    product.dctwProvince || 'Location Unknown' }}
+                  </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between mt-auto pt-2">
+                  <div
+                    class="product-price text-lg lg:text-xl font-bold text-[var(--primaryColor)] dark:text-[var(--primaryColorLight)] mb-2 sm:mb-0">
+                    {{ product.dctwProducttypePrice | currency : "IDR " : "symbol" : "1.0-0" }}
+                  </div>
+
+                  
+                  <p-button label="Shop Now"  styleClass="p-button-sm w-full sm:w-auto"  (click)="openShopDrawer(product)"
+                    [disabled]="product.dctwProducttypeStockQty === '0' || !product.dctwProducttypeStockQty"></p-button>
+               
+               
+                  </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template #grid let-items>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-1">
+            <div *ngFor="let product of items"
+              class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 p-4 h-full flex flex-col justify-between hover:border-[var(--primaryColor)] dark:hover:border-[var(--primaryColorLight)] transition duration-200 rounded-lg shadow-sm hover:shadow-md">
+
+              <div class="flex justify-center items-center mb-3 h-40 bg-gray-50 dark:bg-gray-600 rounded">
+                <img [src]="product.images?.[0]?.itemImageSrc || 'assets/noimage.jpg'"
+                  [alt]="product.dctwProductName || 'Product Image'" class="max-h-full max-w-full object-contain"
+                  onError="this.src='assets/noimage.jpg'" />
+              </div>
+
+              <div
+                class="flex flex-col border-t dark:border-gray-500 pt-3 font-[var(--fontFamily)] text-gray-800 dark:text-gray-100">
+                <a href="#" (click)="$event.preventDefault(); openShopDrawer(product)"
+                  class="text-sm font-medium title-card mb-2 hover:text-[var(--primaryColor)] dark:hover:text-[var(--primaryColorLight)] transition line-clamp-2 min-h-[2.5em]"
+                  pTooltip="{{ product.dctwProductTypeSpec || product.dctwProductName || 'View Details' }}"
+                  tooltipPosition="top">
+                  {{ product.dctwProductTypeSpec || product.dctwProductName || 'View Details' }}
+                </a>
+
+                <div
+                  class="flex flex-row flex-wrap justify-start gap-x-3 gap-y-1 text-xs sm:text-sm text-gray-700 dark:text-gray-300 mb-2">
+                  <div class="flex items-center">
+                    <i pTooltip="Stock Available" tooltipPosition="top" class="pi pi-box mr-1 text-xs sm:text-sm"></i>
+                    {{ product.dctwProducttypeStockQty || 'N/A' }}
+                  </div>
+                  <div class="flex items-center">
+                    <i pTooltip="Minimum Order" tooltipPosition="top"
+                      class="pi pi-info-circle mr-1 text-xs sm:text-sm"></i>
+                    {{ product.dctwProducttypeMinQty || 'N/A' }}
+                  </div>
+                </div>
+
+                <div
+                  class="flex items-center text-xs text-gray-500 dark:text-gray-400 min-h-[1.5rem] mb-2 line-clamp-1">
+                  <i class="pi pi-map-marker mr-1" pTooltip="Location" tooltipPosition="top"></i>
+                  {{ product.dctwCity ? product.dctwCity + (product.dctwProvince ? ', ' + product.dctwProvince : '') :
+                  product.dctwProvince || 'Location Unknown' }}
+                </div>
+
+                <div
+                  class="product-price text-sm font-semibold text-[var(--primaryColor)] dark:text-[var(--primaryColorLight)] mb-2">
+                  {{ product.dctwProducttypePrice | currency : "IDR " : "symbol" : "1.0-0" }}
+                </div>
+
+                
+               <button
+                pButton
+                pRipple
+                type="button"
+                label="Shop Now"
+                icon="pi pi-shopping-cart"
+                iconPos="right"
+                (click)="openShopDrawer(product)"
+                class="p-button-sm w-full"
+                 pTooltip="Belanja Sekarang"
+                tooltipPosition="top" 
+
+        tooltipPosition="top"
+                styleClass="bg-primary-500 hover:bg-primary-600 border-primary-500 hover:border-primary-600 text-white transition-colors duration-150 flex justify-center items-center"
+              ></button>
+
+               
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template #empty>
+          <div class="p-8 text-center text-gray-500 dark:text-gray-400">
+            <i class="pi pi-inbox text-4xl mb-3"></i>
+            <p class="text-xl">No products found.</p>
+            <p>Try adjusting your filters or check back later.</p>
+          </div>
+        </ng-template>
+      </p-dataview>
+    </div>
+  </div>
+</div>
+
+<button *ngIf="!isDesktop"
+  class="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-5 py-3 shadow-lg md:hidden flex items-center"
+  (click)="sidebarVisible = !sidebarVisible">
+  <i class="pi pi-sliders-h mr-2"></i> Filters
+</button>
+
+<app-shop-drawer [(visible)]="showDrawer" [product]="selectedProduct" (close)="showDrawer = false"></app-shop-drawer>

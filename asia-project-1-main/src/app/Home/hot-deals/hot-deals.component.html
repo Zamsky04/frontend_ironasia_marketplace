@@ -1,0 +1,29 @@
+
+<div class="my-8"> <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    <div class="p-4 sm:p-6"> <div class="mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between sm:items-center">
+        <div class="mb-3 sm:mb-0">
+          <h2 class="text-2xl lg:text-3xl font-bold text-slate-800">
+            Hot Deals
+          </h2>
+          <p class="text-sm text-slate-600 mt-1 max-w-xl">
+            Discover our best offers and handpicked products at unbeatable prices. Don't miss out!
+          </p>
+        </div>
+        
+      </div>
+
+      <div>
+        <app-product-list-card
+          [products]="hotd" 
+          (shopNowClicked)="openShopDrawer($event)"
+        ></app-product-list-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-shop-drawer
+  [(visible)]="showDrawer"
+  [product]="selectedProduct"
+  (close)="showDrawer = false"
+></app-shop-drawer>

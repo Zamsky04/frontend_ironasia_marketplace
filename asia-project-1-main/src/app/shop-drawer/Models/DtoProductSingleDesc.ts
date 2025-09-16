@@ -1,0 +1,22 @@
+export interface DtoProductSingleDesc {
+ctwCtechId: string,
+dctwId: number,
+dctwProductCode: number,
+dctwProductName: string,
+dctwProducttypeCode: number,
+dctwProducttypeName: string,
+dctwProducttypeStockQty: number,
+dctwProducttypeMinQty: number,
+dctwProducttypePrice: number,
+dctwProducttypeDesc: string,
+dctwProductTypeSize: string,
+dctwProductTypeSpec: string,
+dctwProductTypeAlias: string,
+dctwImageurll: string,
+dctwImageurl2: string,
+dctwImageurl3: string,
+dctwImageurl4: string,
+dctwSupplierCode:string,
+dctwProvince:string,
+dctwcountry:string
+}

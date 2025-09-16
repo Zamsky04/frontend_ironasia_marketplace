@@ -1,0 +1,23 @@
+:host ::ng-deep .p-megamenu .p-megamenu-root-list {
+  display: flex;
+  flex-wrap: nowrap; /* <-- Bagian paling penting */
+  align-items: center;
+  justify-content: center; /* Agar tetap di tengah container */
+  width: 100%;
+}
+
+/* CSS Anda yang sudah ada */
+.middle-header {
+  border-bottom: none;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+}
+
+.menu {
+  border-bottom: 1px solid #c2c6cd;
+}
+
+.disabled-link {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}

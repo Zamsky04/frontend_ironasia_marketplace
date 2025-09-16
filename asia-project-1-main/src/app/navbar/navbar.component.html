@@ -1,0 +1,154 @@
+<header class="menu sticky top-0 z-10">
+  <app-header-nav></app-header-nav>
+  <div class="middle-header bg-white">
+    <div class="container mx-auto px-2">
+      <div class="flex flex-row items-center gap-5 py-2">
+        <div class="hidden md:flex lg:flex justify-center w-auto cursor-pointer flex-shrink-0" [routerLink]="['/']">
+          <img class="h-20 w-auto" src="/img/logo.png" alt="Your Company" />
+        </div>
+
+        <div class="w-full flex-1 min-w-0">
+          <div class="flex items-center border border-gray-300 rounded px-3 h-10 w-full">
+            <button type="button" (click)="openSearchPage(searchTerm)"
+              class="text-gray-500 hover:text-indigo-600 focus:outline-none">
+              <i class="pi pi-search text-lg"></i>
+            </button>
+            <input 
+              type="text" 
+              placeholder="Search" 
+              class="w-full focus:outline-none ml-2 bg-transparent"
+              maxlength="60"  
+              [(ngModel)]="searchTerm"
+              (input)="onSearchInput()"
+              (keyup.enter)="openSearchPage(searchTerm)" />
+          </div>
+          <div *ngIf="isSearchInputTooLong" class="mt-1">
+            <small class="text-red-500">
+              Maksimal 60 karakter telah tercapai.
+            </small>
+          </div>
+        </div>
+
+        <div *ngIf="isMegaMenuVisible" class="hidden lg:flex items-center justify-center bg-white flex-shrink-0">
+          <p-megamenu [model]="items" class="w-auto" />
+        </div>
+
+        <div class="flex w-auto justify-center gap-5 lg:gap-10 flex-shrink-0">
+          
+         <div class="relative inline-block group py-2" (mouseleave)="notificationExpanded = false">
+    <div 
+      [class.cursor-pointer]="notificationItems.length > 0"
+      (mouseenter)="getNotificationList()">
+      <p-overlay-badge [value]="notif.length" severity="danger">
+        <i class="pi pi-bell" style="font-size: 2rem"></i>
+      </p-overlay-badge>
+    </div>
+    
+    <!-- [INI BAGIAN PENTING YANG HILANG] Konten Dropdown Notifikasi -->
+    <div class="absolute right-0 top-full bg-white border rounded-lg shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 lg:w-96 md:w-72">
+      
+      <!-- Tampilkan jika ada notifikasi -->
+      <div *ngIf="notificationItems.length > 0; else emptyNotif" class="flex flex-col max-h-96">
+        <div class="px-4 py-3 border-b font-semibold text-base text-black">
+          Notifications ({{ notificationItems.length }})
+        </div>
+        <div class="overflow-y-auto flex-1">
+          <div *ngFor="let item of notificationExpanded ? notificationItems : notificationItems.slice(0, 5)"
+            class="flex items-start justify-between gap-3 border-b p-3 w-full hover:bg-gray-50">
+            <div class="flex-1 flex flex-col gap-1">
+              <p class="font-semibold text-base text-gray-800">
+                {{ item.typeDescription }}
+              </p>
+              <p class="text-sm text-gray-600">
+                {{ item.description }}
+              </p>
+            </div>
+            <button (click)="deleteNotification(item, $event)"
+              class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors duration-150"
+              aria-label="Delete notification">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+          <div *ngIf="notificationItems.length > 5"
+            class="flex items-center justify-center gap-2 py-2 cursor-pointer hover:bg-gray-100"
+            (click)="notificationExpanded = !notificationExpanded">
+            <span class="text-sm text-blue-600 font-medium">
+              {{ notificationExpanded ? "Show Less" : "Show More" }}
+            </span>
+            <i class="pi text-sm" [ngClass]="notificationExpanded ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tampilkan jika tidak ada notifikasi -->
+      <ng-template #emptyNotif>
+        <p class="text-center text-gray-500 p-4">You have no new notifications.</p>
+      </ng-template>
+
+    </div>
+</div>
+          
+        <div class="relative inline-block group py-2" (mouseleave)="cartExpanded = false">
+    <div 
+      [class.cursor-pointer]="cartItems.length > 0"
+      [class.cursor-not-allowed]="cartItems.length === 0"
+      (click)="cartItems.length > 0 && openInNewTab('/cart')">
+      <p-overlay-badge [value]="cartItems.length" class="inline-flex" severity="danger">
+        <i class="pi pi-shopping-cart" style="font-size: 2rem"></i>
+      </p-overlay-badge>
+    </div>
+
+    <!-- [INI BAGIAN PENTING YANG HILANG] Konten Dropdown Keranjang -->
+    <div class="absolute right-0 top-full mt-2 lg:w-96 md:w-72 bg-white border rounded-lg shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+      
+      <!-- Tampilkan jika ada isi keranjang -->
+      <div *ngIf="cartItems.length > 0; else emptyCart" class="flex flex-col max-h-96">
+        <div class="px-4 py-3 border-b font-semibold text-base text-black">
+          Cart ({{ cartItems.length }} item{{ cartItems.length > 1 ? "s" : "" }})
+        </div>
+        <div class="overflow-y-auto flex-1">
+          <div *ngFor="let item of cartExpanded ? cartItems : cartItems.slice(0, 5)" class="flex items-start gap-3 border-b p-3">
+            <img [src]="item.images?.[0]?.itemImageSrc || '/img/no-image.png'" alt="Product Image"
+              class="w-14 h-14 object-cover rounded" />
+            <div class="flex-1">
+              <p class="font-semibold text-base line-clamp-2">
+                {{ item.name }}
+              </p>
+              <div class="text-sm text-gray-600 flex justify-between mt-1 w-full whitespace-nowrap gap-4">
+                <span class="truncate">
+                  {{ item.qty }} × {{ item.price | currency : "IDR " : "symbol" }}
+                </span>
+                <span class="font-semibold text-black text-right lg:min-w-[100px] text-nowrap">
+                  {{ item.qty * item.price | currency : "IDR " : "symbol" }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="cartItems.length > 5" class="flex items-center justify-center gap-2 py-2 cursor-pointer hover:bg-gray-100"
+            (click)="cartExpanded = !cartExpanded">
+            <span class="text-sm text-blue-600 font-medium">
+              {{ cartExpanded ? "Show Less" : "Show More" }}
+            </span>
+            <i class="pi text-sm" [ngClass]="cartExpanded ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+          </div>
+        </div>
+        <div class="p-3 border-t bg-gray-50">
+          <a (click)="openInNewTab('/cart')" class="p-button font-bold w-full cursor-pointer text-center block bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700">
+            View Cart
+          </a>
+        </div>
+      </div>
+
+      <!-- Tampilkan jika keranjang kosong -->
+      <ng-template #emptyCart>
+        <p class="text-center text-gray-500 p-4">Your cart is empty.</p>
+      </ng-template>
+
+    </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

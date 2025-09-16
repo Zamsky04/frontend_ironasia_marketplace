@@ -1,0 +1,90 @@
+<div class="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
+  <div class="space-y-8">
+
+    <div>
+      <h3 class="text-lg font-semibold text-gray-900">Your Quotation / Offer</h3>
+      <p class="mt-1 text-sm text-gray-600">Fill in your quotation details below.</p>
+      
+      <div class="mt-6 space-y-5">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+          
+          <div>
+            <label for="quantity" class="block text-sm font-medium text-gray-700">Offer Quantity</label>
+            <div class="mt-1">
+              <input type="number" name="quantity" [(ngModel)]="offerQty" id="quantity" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., 100">
+            </div>
+          </div>
+          
+          <div>
+            <label for="price" class="block text-sm font-medium text-gray-700">Offer Price (per item)</label>
+            <div class="relative mt-1 rounded-md shadow-sm">
+              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <span class="text-gray-500 sm:text-sm">IDR.</span>
+              </div>
+              <input type="number" name="price" id="price"  [(ngModel)]="offerPrice" class="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="0.00">
+            </div>
+          </div>
+
+        </div>
+        <div>
+          <label for="response-notes" class="block text-sm font-medium text-gray-700">Your Notes / Offer Description</label>
+          <div class="mt-1">
+            <textarea id="response-notes" name="response-notes"  [(ngModel)]="offerNotes" rows="8" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Describe the product you are offering, delivery time, price validity, etc."></textarea>
+          </div>
+          <p class="mt-2 text-xs text-gray-500">You can add information about specifications, warranty, or terms and conditions.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 pt-5 border-t border-gray-200">
+    <div class="flex justify-end space-x-3">
+        <button (click)="cancelResponse()" type="button" class="w-full sm:w-auto inline-flex justify-center text-center px-6 py-2.5 rounded-md font-semibold text-sm bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 shadow-sm">
+            Cancel
+        </button>
+        <button (click)="sendResponse()" class="w-full sm:w-auto inline-flex justify-center text-center px-6 py-2.5 rounded-md font-semibold text-sm text-white bg-green-600 hover:bg-green-700 shadow-sm transition-colors duration-200">
+            Submit Offer
+        </button>
+    </div>
+  </div>
+  
+    <div class="border-t border-gray-200"></div>
+
+    <div>
+      <button (click)="toggleRequestDetails()" type="button" class="w-full flex justify-between items-center text-left">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900">Customer's Request Details</h3>
+          <p class="mt-1 text-sm text-gray-600">Click to view or hide the customer's original request.</p>
+        </div>
+        <svg class="h-6 w-6 text-gray-500 transition-transform duration-200" [ngClass]="{'rotate-180': !isRequestDetailsVisible}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+        </svg>
+      </button>
+
+      <div *ngIf="isRequestDetailsVisible" class="mt-6 space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Requested Product</dt>
+              <dd class="mt-1 text-base font-semibold text-gray-800">{{ inquiryDetails?.dbmdProductName }}</dd>
+            </div>
+           <!--> <div>
+              <dt class="text-sm font-medium text-gray-500">Quantity</dt>
+              <dd class="mt-1 text-base font-semibold text-gray-800">{{ inquiryDetails?.dbmdQty }}</dd>
+            </div>-->
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500">Notes from Customer</dt>
+          <dd class="mt-2">
+            <blockquote class="border-l-4 border-gray-300 bg-gray-50 p-4">
+              <p class="text-base text-gray-700 italic whitespace-pre-wrap">
+                "{{ inquiryDetails?.dbmdNotes || 'No specific notes provided.' }}"
+              </p>
+            </blockquote>
+          </dd>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+</div>

@@ -1,0 +1,46 @@
+<header>
+  <div class="top-header">
+    <div class="container mx-auto px-8">
+      <div class="flex flex-wrap flex-row justify-between text-center">
+        <ul class="flex flex-wrap flex-row justify-center md:justify-start gap-4 header-left-content ">
+  <li><a href="#" (click)="about($event)">About</a></li>
+  <li><a href="#" (click)="rfq($event)">Request For Quotation</a></li>   
+  <li><a href="#" (click)="help($event)">Need Help</a></li> 
+</ul>
+        <ul
+          class="flex flex-wrap flex-row justify-center w-full md:w-auto mt-2 md:mt-0 header-right-content"
+        >
+        <li class="account-dropdown">
+  <a href="#" class="my-account" [class.no-click]="myacc !== 'My Account'">
+    <ng-container *ngIf="myacc === 'My Account'; else loggedInState">
+      <p-avatar icon="pi pi-user" styleClass="mr-2" shape="circle"></p-avatar>
+    </ng-container>
+    <ng-template #loggedInState>
+      <img [src]="mypp" (error)="onImageError($event)" alt="User Avatar" class="account-logo" />
+    </ng-template>
+
+    <span class="account-name">{{ myacc }}</span>
+    <i class="ri-arrow-down-s-line dropdown-icon"></i>
+  </a>
+
+  <ul class="dropdown-menu">
+    
+    <ng-container *ngIf="myacc === 'My Account'">
+      <li>
+        <a href="#" (click)="login($event)"><i class="ri-login-box-line"></i> Login</a>
+      </li>
+      <li>
+        <a href="#" (click)="registration($event)"><i class="ri-user-add-line"></i> Sign Up</a>
+      </li>
+    </ng-container>
+
+    <ng-container *ngIf="myacc !== 'My Account'">
+      </ng-container>
+
+  </ul>
+</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>

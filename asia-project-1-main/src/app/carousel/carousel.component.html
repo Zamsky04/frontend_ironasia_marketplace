@@ -1,0 +1,21 @@
+<p-carousel
+  #carousel
+  [value]="items"
+  [numVisible]="1"
+  [circular]="true"
+  [responsiveOptions]="responsiveOptions"
+  [showNavigators]="false"
+  [showIndicators]="false"
+  autoplayInterval="3000"
+>
+  <ng-template let-product #item>
+    <div class="relative">
+      <!-- Image -->
+      <img
+        [src]="product.image"
+        alt="Product Image"
+        class="w-full object-cover"
+      />
+    </div>
+  </ng-template>
+</p-carousel>

@@ -1,0 +1,155 @@
+<p-confirm-dialog></p-confirm-dialog>
+
+<div class="antialiased font-sans bg-gray-50">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <div class="flex items-center gap-4 mb-8">
+      <div class="flex-shrink-0">
+          <img src="/assets/ialogo_awal.png" alt="Company Logo" class="h-12 md:h-14 lg:h-16 w-auto">
+        </div>
+      <h1 class="text-3xl font-bold text-gray-800 tracking-tight">
+        Your Shopping Cart
+      </h1>
+    </div>
+
+   
+    <div *ngIf="isLoading">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-4">
+          <div *ngFor="let i of [1,2,3]" class="bg-white p-4 rounded-lg shadow-sm animate-pulse">
+            <div class="flex gap-4">
+              <div class="w-24 h-24 bg-gray-200 rounded-md"></div>
+              <div class="flex-1 space-y-3 py-1">
+                <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+                <div class="h-3 bg-gray-200 rounded w-1/4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="h-64 bg-white p-6 rounded-lg shadow-sm animate-pulse">
+            <div class="h-6 bg-gray-200 rounded w-2/3 mb-6"></div>
+            <div class="h-4 bg-gray-200 rounded w-full mb-3"></div>
+            <div class="h-4 bg-gray-200 rounded w-full mb-6"></div>
+            <div class="h-10 bg-gray-300 rounded-lg w-full"></div>
+        </div>
+      </div>
+    </div>
+    
+  
+    <div *ngIf="!isLoading && cartProductList.length === 0" class="text-center py-20 bg-white rounded-lg shadow-sm">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        <h3 class="mt-2 text-xl font-medium text-gray-900">Your cart is empty</h3>
+        <p class="mt-1 text-sm text-gray-500">Looks like you haven't added anything to your cart yet.</p>
+       <!-- <div class="mt-6">
+            <button type="button" routerLink="/" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Continue Shopping
+            </button>
+        </div>-->
+    </div>
+
+  
+    <div *ngIf="!isLoading && cartProductList.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-lg shadow-sm">
+          <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+              <div class="flex items-center gap-3">
+                  <p-checkbox [(ngModel)]="selectAll" (onChange)="toggleSelectAll()" [binary]="true" inputId="selectAllCheckbox"></p-checkbox>
+                  <label for="selectAllCheckbox" class="text-sm font-medium text-gray-700 cursor-pointer">
+                      Select All ({{ cartProductList.length }} items)
+                  </label>
+              </div>
+              <button *ngIf="selectAll" (click)="removeSelectedItems()" type="button" class="text-sm font-medium text-red-600 hover:text-red-500 flex items-center gap-1.5 transition-colors"
+               pTooltip="Hapus semua item yang dipilih"
+                       appendTo="body" 
+                       tooltipPosition="top">
+                <i class="pi pi-trash"></i>
+                <span>Delete Selected</span>
+              </button>
+          </div>
+
+          <ul role="list" class="divide-y divide-gray-200">
+            <li *ngFor="let item of cartProductList" class="flex flex-col sm:flex-row p-6 gap-6">
+              <p-checkbox [(ngModel)]="item.selected" (onChange)="onItemSelectionChange()" [binary]="true" inputId="cb_{{item.id}}" class="mt-1 sm:mt-6"></p-checkbox>
+              
+              <img [src]="item.images[0].itemImageSrc" alt="{{ item.name }}" class="w-32 h-32 object-cover rounded-md flex-shrink-0" />
+
+              <div class="relative flex-1 flex flex-col justify-between">
+                <div>
+                  <div class="sm:grid sm:grid-cols-2 sm:gap-x-6">
+                    <div>
+                      <h3 class="text-lg font-bold text-gray-900">{{ item.name }}</h3>
+                      <p class="mt-1 text-sm text-gray-500">{{ item.description }}</p>
+                    </div>
+                    <p class="mt-2 sm:mt-0 text-lg font-bold text-gray-900 sm:text-right">IDR {{ item.price * item.qty | number:"1.0-0" }}</p>
+                  </div>
+                  <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-600">
+                      <span class="font-medium text-gray-800">Unit Price: IDR {{ item.price | number:"1.0-0" }}</span>
+                      <span class="px-2 py-0.5 border rounded-full bg-gray-100 text-gray-700">Min. Purchase: {{ item.minPurchase }}</span>
+                      <span class="px-2 py-0.5 rounded-full font-medium" [ngClass]="{'bg-red-100 text-red-700': item.stock < 10, 'bg-green-100 text-green-700': item.stock >= 10}">Stock: {{ item.stock }}</span>
+                  </div>
+                </div>
+
+                <div class="mt-4 flex items-center justify-between">
+                    <p-inputNumber [(ngModel)]="item.qty" [min]="item.minPurchase" [max]="item.stock" [showButtons]="true" buttonLayout="horizontal" [step]="1" (onInput)="onItemQuantityChange(item)" styleClass="h-9">
+                        <ng-template pTemplate="incrementbuttonicon"><i class="pi pi-plus text-xs"></i></ng-template>
+                        <ng-template pTemplate="decrementbuttonicon"><i class="pi pi-minus text-xs"></i></ng-template>
+                    </p-inputNumber>
+                    
+                    <div class="flex items-center gap-4 text-sm">
+                      <button (click)="openContactDialog(item.supplierCode)" type="button" class="font-medium text-indigo-600 hover:text-indigo-500 flex items-center gap-1"
+                       pTooltip="Hubungi Supplier"
+                       appendTo="body" 
+                       tooltipPosition="top"
+                       
+                      >
+                        <i class="pi pi-phone"></i>
+                        <span>Contact</span>
+                      </button>
+                      
+                      <button (click)="removeItem(item.id)" type="button" class="font-medium text-red-600 hover:text-red-500 flex items-center gap-1"
+                       pTooltip="Hapus Item" 
+                       appendTo="body"
+                       tooltipPosition="top"
+                       >
+                        <i class="pi pi-trash"></i>
+                        <span>Remove</span>
+                      </button>
+                    </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+     
+      <div class="sticky top-24 h-fit">
+        <div class="bg-slate-50 border border-gray-200 p-6 rounded-2xl shadow-sm space-y-4">
+          <h3 class="text-xl font-bold text-gray-900 border-b border-gray-200 pb-3">Order Summary</h3>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between text-gray-600">
+              <span>Subtotal</span>
+              <span class="font-medium text-gray-900">IDR {{ subtotal | number:"1.0-0" }}</span>
+            </div>
+            <div class="flex justify-between text-gray-600">
+              <span>Tax ({{ taxRate }}%)</span>
+              <span class="font-medium text-gray-900">IDR {{ tax | number:"1.0-0" }}</span>
+            </div>
+          </div>
+          <hr/>
+          <div class="flex justify-between text-lg font-bold text-gray-900">
+            <span>Total</span>
+            <span>IDR {{ total | number:"1.0-0" }}</span>
+          </div>
+        <!--  <button pButton icon="pi pi-lock" iconPos="left" label="Proceed to Checkout" (click)="checkout()" [disabled]="total === 0"
+                  class="w-full !bg-indigo-600 !border-indigo-600 !text-white !font-bold !py-3 !text-base !rounded-lg hover:!bg-indigo-700 transition-all duration-300 disabled:!bg-gray-300"></button>
+        -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

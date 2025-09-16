@@ -1,0 +1,56 @@
+/* === letakkan 3 direktif ini di paling atas file === */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== CSS biasa kamu (boleh di luar layer) ===== */
+:root{
+  --fontFamily: "Rubik", sans-serif;
+  --headingFontFamily: "Jost", sans-serif;
+  --primaryColor: #335fd9 ;
+  --secondaryColor: #9C9C9C;
+  --thirdColor: #ff6a00;
+  --whiteColor: #ffffff;
+  --blackColor: #000000;
+  --headingColor: #111111;
+  --transition: all ease .5s;
+  --fontSize: 15px;
+  --borderRadius: 4px;
+  --boxShadow: 0 0 20px 3px rgba(0, 0, 0, .05);
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+}
+.p-megamenu{ border-radius:0!important; border:0!important; }
+.p-megamenu-root-list{ justify-content:center; width:100%; }
+.title{ font-family:var(--fontFamily)!important; font-size:25px!important; font-weight:500!important; }
+
+/* Scrollbar, rating, tooltip, container */
+::-webkit-scrollbar{ width:8px; }
+::-webkit-scrollbar-track{ background:rgba(0,0,0,.1); border-radius:10px; }
+::-webkit-scrollbar-thumb{ background-color:rgba(51,95,217,.3); border-radius:10px; }
+::-webkit-scrollbar-thumb:hover{ background-color:rgba(51,95,217,.5); }
+.p-carousel-indicator-active .p-carousel-indicator-button{ background-color:var(--primaryColor)!important; }
+.p-rating .p-rating-icon{ color:#ff6a00!important; }
+.p-tooltip{ z-index:999999!important; }
+.p-tooltip .p-tooltip-text{ font-size:.7rem!important; padding:.3rem .5rem!important; }
+@media (min-width:1024px){ .container{ max-width:1320px!important; } }
+
+/* ===== Tailwind utilities via @apply (letakkan di layer components) ===== */
+@layer components {
+  .link-footer {
+    @apply text-slate-300 hover:text-white focus-visible:outline-none
+           focus-visible:ring-2 focus-visible:ring-white/30
+           rounded transition-colors;
+  }
+  .btn-icon {
+    @apply inline-flex items-center justify-center h-9 w-9 rounded-full
+           bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white
+           ring-1 ring-white/10 transition-colors
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30;
+  }
+  .btn-chip {
+    @apply inline-flex items-center gap-1 rounded-full px-3 py-1.5
+           bg-white/5 text-slate-300 hover:bg-white/10 ring-1 ring-white/10
+           transition-colors;
+  }
+}

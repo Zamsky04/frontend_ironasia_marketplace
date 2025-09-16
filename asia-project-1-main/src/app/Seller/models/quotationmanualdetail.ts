@@ -1,0 +1,16 @@
+export interface quotationmanualdetail{
+    dbmdQuoNo: string,
+    dbmdBlastId: string,
+    dbmdSeq: string,
+    dbmdSuppNo: string,
+    dbmdCustNo: string,
+    dbmdNotes: string,
+    dbmdProductName: string,
+    dbmdQty: number,
+    dbmdProductImage1: string,
+    dbmdProductImage2: string,
+    dbmdAreaName: string,
+    dbmdProvinsi: string,
+    dbmdCity: string,
+    dbmdStatus: string, 
+}

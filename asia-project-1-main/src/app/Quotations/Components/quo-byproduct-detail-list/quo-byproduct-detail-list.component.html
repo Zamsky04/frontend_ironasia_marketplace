@@ -1,0 +1,44 @@
+<div class="relative w-full">
+    <h1 class="text-3xl font-bold mb-6 text-blue-700 bg-blue-200 inline-flex items-center justify-between px-4 py-2 w-full">
+        <span>Quotation By Product List - {{p_quono}}</span>
+    </h1>
+</div>
+<div *ngFor="let item of quoList" class="container mx-auto p-4">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row transition-transform transform hover:scale-105">
+        <div class="md:w-3/6 p-4 space-y-4">
+            <div class="w-full h-64 relative border-4 border-gray-200 rounded-lg">
+                <img [src]="item.quotationProductImage1" alt="Product Image" class="w-full h-full object-contain rounded-lg">
+            </div>
+            <div class="w-full flex flex-wrap -mx-2 mt-2">
+                <img [src]="item.quotationProductImage2" alt="Product Image" *ngIf="item.quotationProductImage2" class="w-1/4 h-24 px-2 mb-2 rounded-lg object-cover">
+                <img [src]="item.quotationProductImage3" alt="Product Image" *ngIf="item.quotationProductImage3" class="w-1/4 h-24 px-2 mb-2 rounded-lg object-cover">
+                <img [src]="item.quotationProductImage4" alt="Product Image" *ngIf="item.quotationProductImage4" class="w-1/4 h-24 px-2 mb-2 rounded-lg object-cover">
+            </div>
+        </div>
+        <div class="md:w-3/5 p-4 space-y-4">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">{{item.ctqdProductName}}</h2>
+                <div class="flex items-center text-gray-600 text-sm mb-4">
+                    <span>{{item.ctqdProducttypeName}}</span>
+                    <span class="ml-2">IDR. {{item.ctqdProducttypePrice| number}}</span>
+                </div>
+                <p class="text-gray-700 mb-4">{{item.ctqdProducttypeDesc}}</p>
+            </div>
+            <div class="flex justify-end">
+                </div>
+            <div class="mt-4 border-t border-gray-200 pt-4">
+                <h3 class="text-lg font-medium text-gray-900 mb-2">Specifications</h3>
+                <ul class="text-gray-700 list-disc list-inside space-y-2">
+                    <li>Alias: {{item.ctqdProductTypeAlias}}</li>
+                    <li>Size: {{item.ctqdProductTypeSize}}</li>
+                    <li>Qty Purchase: {{item.ctqdProducttypeQty}}</li>
+                    <li>Min. Purchase: {{item.ctqdProducttypeMinQty}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="p_status === 'RQ'" class="bg-white rounded-lg shadow-md p-4 mt-4">
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Reject Note</h3>
+        <p class="text-gray-700">{{p_reason || 'No notes available.'}}</p>
+    </div>
+</div>

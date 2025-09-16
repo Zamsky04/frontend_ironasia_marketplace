@@ -1,0 +1,137 @@
+<div class="container mx-auto p-6 relative">
+  <!-- Tombol Close -->
+  <button class="close-icon" mat-icon-button color="warn" style="position: absolute; right: 10px; top: 5px;"
+    (click)="closeForm()" title="Close">
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <h1 class="text-2xl font-bold mb-4">Customer Address</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submitProducts()" enctype="multipart/form-data">
+    <div class="grid grid-cols-1 gap-6">
+
+      <!-- Cust No & Type -->
+      <div class="hidden">
+        <div>
+          <label class="block font-bold text-gray-700 mb-2">Customer No <span class="text-red-500">*</span></label>
+          <input type="text" formControlName="ccaddrCustNo" placeholder="Customer No"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+        </div>
+
+        <div class="hidden">
+          <label class="block font-bold text-gray-700 mb-2">Type <span class="text-red-500">*</span></label>
+          <select formControlName="ccaddrType"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline">
+            <option [ngValue]="null" disabled>-- Cust Type --</option>
+            <option *ngFor="let level of CustTypeOptions" [ngValue]="level.value">
+              {{ level.label }}
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Address -->
+      <div>
+        <label class="block font-bold text-gray-700 mb-2">Address <span class="text-red-500">*</span></label>
+        <textarea formControlName="ccaddrAddress" placeholder="Address"
+          class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"></textarea>
+      </div>
+
+      <!-- RT & RW -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block font-bold text-gray-700 mb-2">RT <span class="text-red-500">*</span></label>
+          <input type="text" formControlName="ccaddrRt" placeholder="RT"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-2">RW <span class="text-red-500">*</span></label>
+          <input type="text" formControlName="ccaddrRw" placeholder="RW"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+        </div>
+      </div>
+
+      <!-- Province & City -->
+      <div class="grid grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Province <span class="text-red-500">*</span></label>
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Province</mat-label>
+            <mat-select formControlName="ccaddrProvCode" (selectionChange)="changeprov($event.value)">
+              <mat-option *ngFor="let pro of provlist" [value]="pro.cmpsiProvCode.toString()">
+                {{ pro.cmpsiProvinsi }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">City <span class="text-red-500">*</span></label>
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>City</mat-label>
+            <mat-select formControlName="ccaddrCityCode" (selectionChange)="changecity($event.value)">
+              <mat-option *ngFor="let cit of citylist" [value]="cit.cmcitCityCode.toString()">
+                {{ cit.cmcitCity }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Kecamatan & Kelurahan -->
+      <div class="grid grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Kecamatan <span class="text-red-500">*</span></label>
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Kecamatan</mat-label>
+            <mat-select formControlName="ccaddrKecCode" (selectionChange)="changekecamatan($event.value)">
+              <mat-option *ngFor="let kc of keclist" [value]="kc.cmkecKecCode.toString()">
+                {{ kc.cmkecKecamatan }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Kelurahan <span class="text-red-500">*</span></label>
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Kelurahan</mat-label>
+            <mat-select formControlName="ccaddrKelCode" (selectionChange)="changekelurahan($event.value)">
+              <mat-option *ngFor="let kl of kellist" [value]="kl.cmkelKelCode.toString()">
+                {{ kl.cmkelKelurahan }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- ZipCode & LongLat -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block font-bold text-gray-700 mb-2">Zip Code <span class="text-red-500">*</span></label>
+          <input type="text" formControlName="ccaddrZipCode" placeholder="Zip Code"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-2">LongLat</label>
+          <input type="text" formControlName="ccaddrLongLat" placeholder="Longitude & Latitude"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+        </div>
+      </div>
+
+      <!-- Area -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block font-bold text-gray-700 mb-2">Area</label>
+          <input type="text" formControlName="ccaddrArea" placeholder="Area"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" />
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="flex justify-end mt-6">
+        <button mat-raised-button color="primary" type="submit">Simpan</button>
+      </div>
+
+    </div>
+  </form>
+</div>

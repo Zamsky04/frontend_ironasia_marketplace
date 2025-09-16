@@ -1,0 +1,35 @@
+export interface CustGeneral {
+  ccustRegId: string;
+  ccustNo: string;
+  ccustType: string;
+  ccustName: string;
+  ccustAlias: string;
+  ccustEmail: string;
+  ccustPhone: string;
+  ccustHandPhone: string;
+  ccustPassword: string;
+  ccustStatus: string;
+  ccustAreaName: string;
+  ccustNpwpNo: string;
+  ccustNibNo: string;
+  ccustPkbNo: string;
+  ccustKtpNo: string;
+  ccustGrade: string;
+  ccustCreateBy: string;
+  ccustCreateDate: string;
+  ccustUpdateBay: string;
+  ccustUpdateDate: string;
+  ccustNeedApproval: number;
+  ccustNpwpPicRefNo: number;
+  ccustNpwpPicSeqNo: number;
+  ccustNibPicRefNo: number;
+  ccustNibPicSeqNo: number;
+  ccustPkpPicRefNo: number;
+  ccustPkpPicSeqNo: number;
+  ccustKtpPicRefNo: number;
+  ccustKtpPicSeqNo: number;
+  role: string;
+  ccustFilename: string;
+  ccustFilePath: string;
+  ccustCorebussiness: string;
+}

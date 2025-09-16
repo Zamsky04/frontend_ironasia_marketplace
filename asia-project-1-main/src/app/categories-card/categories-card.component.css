@@ -1,0 +1,61 @@
+.single-categories{
+    z-index: 1 !important;
+    position: relative !important;
+    margin-bottom: 25px !important;
+    border: 1px solid #dddddd !important;
+    padding: 10px 180px 10px 10px !important;
+    transition: var(--transition) !important;
+    height: 143px;
+}
+.single-categories::before{
+    top: 0;
+    right: 0;
+    width: 50%;
+    content: "";
+    z-index: -1;
+    height: 100%;
+    position: absolute;
+    background-color: #eff5ff;
+    transition: var(--transition);
+    clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+}
+.single-categories:hover{
+    border-color: var(--primaryColor) !important;
+}
+.single-categories:hover h3{
+    color: var(--primaryColor) !important;
+}
+.single-categories a{
+    text-decoration: none !important;
+}
+.single-categories a img{
+    top: 10px;
+    right: 35px;
+    width: 120px !important;
+    position: absolute;
+    height: 120px !important;
+    vertical-align: middle;
+}
+h3{
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--headingColor);
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: .5rem;
+    line-height: 1.2;
+}
+span{
+    display: block;
+    margin-bottom: 20px;
+    color: var(--secondaryColor);
+    font-size: var(--fontSize);
+    font-family: var(--fontFamily);
+}
+
+.read-now {
+  font-size: 15px !important;
+  color: var(--headingColor) !important; /* <-- HAPUS BARIS INI atau komentari */
+  font-weight: 400 !important; /* <-- Hati-hati jika ingin diatur Tailwind, !important bisa jadi masalah */
+}
+

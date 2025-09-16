@@ -1,0 +1,15 @@
+export interface requestlistupd{
+    prodno:string,
+    prodname:string,
+    prodtypename:string,
+    previmg:string,
+    previmg2:string,
+    previmg3:string,
+    previmg4:string,
+    prodprice:string,
+    proddesc:string,
+    prodAlias :string,
+    prodsize :string,
+    prodStock :string,
+    prodMinpurc: string,
+}

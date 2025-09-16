@@ -1,0 +1,12 @@
+::ng-deep .mat-mdc-paginator-page-size .mat-mdc-select-value {
+  display: flex;
+  justify-content: center; /* Horizontal center */
+  align-items: center;     /* Vertical center */
+  text-align: center;
+}
+
+::ng-deep .mat-mdc-paginator-page-size .mat-mdc-select-trigger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

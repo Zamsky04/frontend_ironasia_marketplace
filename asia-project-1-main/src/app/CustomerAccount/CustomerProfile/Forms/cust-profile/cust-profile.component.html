@@ -1,0 +1,190 @@
+<div class="max-w-6xl mx-auto px-4 lg:px-8 py-6 bg-white rounded-lg shadow-md">
+  <h2 class="text-2xl font-semibold text-gray-800 mb-6">Customer Profile</h2>
+
+  <form *ngIf="form" [formGroup]="form" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- KIRI: Form Input -->
+    <div class="space-y-4">
+      <!-- Username -->
+      <div>
+        <label class="text-sm text-gray-700 mb-1 block">Username <span class="text-red-500">*</span> </label>
+        <input type="text" formControlName="ccustAlias"
+          class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm" />
+        <!-- Pesan error -->
+        <span *ngIf="form.get('ccustAlias')?.touched && form.get('ccustAlias')?.hasError('required')"
+          class="text-red-500 text-xs mt-1 block">
+          User Name wajib diisi.
+        </span>
+
+      </div>
+
+      <!-- Nama Lengkap -->
+      <div>
+        <label class="text-sm text-gray-700 mb-1 block">Nama Lengkap <span class="text-red-500">*</span> </label>
+        <input type="text" formControlName="ccustName"
+          class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm" />
+        <!-- Pesan error -->
+        <span *ngIf="form.get('ccustName')?.touched && form.get('ccustName')?.hasError('required')"
+          class="text-red-500 text-xs mt-1 block">
+          Nama Lengkap wajib diisi.
+        </span>
+      </div>
+
+      <!-- Email + Ubah -->
+      <div class="grid grid-cols-[1fr_auto] items-start gap-2">
+        <div>
+          <label class="text-sm text-gray-700 mb-1 block">Email <span class="text-red-500">*</span> </label>
+          <input type="email" formControlName="ccustEmail" [disabled]="emailDisabled"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm" />
+
+          <!-- Pesan error -->
+          <span *ngIf="form.get('ccustEmail')?.touched && form.get('ccustEmail')?.hasError('required')"
+            class="text-red-500 text-xs mt-1 block">
+            Email wajib diisi.
+          </span>
+          <span *ngIf="form.get('ccustEmail')?.touched && form.get('ccustEmail')?.hasError('email')"
+            class="text-red-500 text-xs mt-1 block">
+            Format email tidak valid.
+          </span>
+        </div>
+
+        <button type="button" class="text-blue-500 text-sm mt-6" (click)="toggleEmailEdit()">
+          Ubah
+        </button>
+      </div>
+
+
+      <!-- Nomor HP + Ubah -->
+      <div class="grid grid-cols-[1fr_auto] items-start gap-2">
+        <div>
+          <label class="text-sm text-gray-700 mb-1 block">Nomor Handphone <span class="text-red-500">*</span> </label>
+          <input type="Nomor Handphone" formControlName="ccustHandPhone" [disabled]="notlpDisabled"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm" />
+
+          <!-- Pesan error -->
+          <span *ngIf="form.get('ccustHandPhone')?.touched && form.get('ccustHandPhone')?.hasError('required')"
+            class="text-red-500 text-xs mt-1 block">
+            Nomor Handphone wajib diisi.
+          </span>
+        </div>
+
+        <button type="button" class="text-blue-500 text-sm mt-6" (click)="toggleHpEdit()">
+          Ubah
+        </button>
+      </div>
+
+    </div>
+
+    <!-- KANAN: Upload 3 Gambar -->
+    <div class="col-span-1 md:col-span-2">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Upload Gambar 1 -->
+        <div
+          class="flex flex-col items-center space-y-3 border-2 border-dashed border-gray-300 hover:border-indigo-400 px-3 py-5 rounded-md transition-colors duration-200 ease-in-out overflow-hidden">
+          <label class="text-sm text-gray-700 mb-3 block self-start">Upload Foto Profil</label>
+          <ng-container *ngIf="preview; else noImage1">
+            <div
+              class="w-full aspect-[4/3] bg-gray-50 rounded-md shadow-md overflow-hidden flex items-center justify-center">
+              <img [src]="preview" alt="Image Preview 1" class="w-full h-full object-contain"/>
+            </div>
+          </ng-container>
+          <ng-template #noImage1>
+            <div class="flex flex-col items-center justify-center text-gray-400">
+              <img src="assets/icons8-no-image-100.png" alt="No Image" class="h-24 w-24 opacity-70 mb-2" />
+              <span class="text-sm font-medium">Belum ada gambar</span>
+            </div>
+          </ng-template>
+          <input type="file" accept="image/*" #fileInput1 style="display: none" (change)="onFileSelected($event, 1)" />
+          <button type="button"
+            class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150 ease-in-out"
+            (click)="fileInput1.click()">
+            <mat-icon class="mr-1 align-middle text-sm">cloud_upload</mat-icon> Change Profile Photo
+          </button>
+        </div>
+
+        <!-- Upload Gambar 2 -->
+        <div
+          class="flex flex-col items-center space-y-3 border-2 border-dashed border-gray-300 hover:border-indigo-400 px-3 py-5 rounded-md transition-colors duration-200 ease-in-out overflow-hidden">
+          <div class="w-full">
+            <span class="text-sm text-gray-600 block mb-1">Nomor KTP</span>
+            <p class="text-sm text-gray-800 font-medium">{{ form.get('ccustKtpNo')?.value || '—' }}</p>
+          </div>
+          <ng-container *ngIf="preview2; else noImage2">
+            <div
+              class="w-full aspect-[4/3] bg-gray-50 rounded-md shadow-md overflow-hidden flex items-center justify-center">
+              <img [src]="preview2" alt="Image Preview 2" class="w-full h-full object-contain"/>
+            </div>
+          </ng-container>
+          <ng-template #noImage2>
+            <div class="flex flex-col items-center justify-center text-gray-400">
+              <img src="assets/icons8-no-image-100.png" alt="No Image" class="h-24 w-24 opacity-70 mb-2" />
+              <span class="text-sm font-medium">Belum ada gambar</span>
+            </div>
+          </ng-template>
+          <input type="file" accept="image/*" #fileInput2 style="display: none" (change)="onFileSelected($event, 2)" />
+        </div>
+
+        <!-- Upload Gambar 3 -->
+        <div
+          class="flex flex-col items-center space-y-3 border-2 border-dashed border-gray-300 hover:border-indigo-400 px-3 py-5 rounded-md transition-colors duration-200 ease-in-out overflow-hidden">
+          <div class="w-full">
+            <span class="text-sm text-gray-600 block mb-1">Nomor NIB</span>
+            <p class="text-sm text-gray-800 font-medium">{{ form.get('ccustNibNo')?.value || '—' }}</p>
+          </div>
+          <ng-container *ngIf="preview3; else noImage3">
+            <div
+              class="w-full aspect-[4/3] bg-gray-50 rounded-md shadow-md overflow-hidden flex items-center justify-center">
+              <img [src]="preview3" alt="Image Preview 3" class="w-full h-full object-contain"/>
+            </div>
+          </ng-container>
+          <ng-template #noImage3>
+            <div class="flex flex-col items-center justify-center text-gray-400">
+              <img src="assets/icons8-no-image-100.png" alt="No Image" class="h-24 w-24 opacity-70 mb-2" />
+              <span class="text-sm font-medium">Belum ada gambar</span>
+            </div>
+          </ng-template>
+          <input type="file" accept="image/*" #fileInput3 style="display: none" (change)="onFileSelected($event, 3)" />
+        </div>
+      </div>
+      <!-- Modal untuk gambar -->
+      <!--<div *ngIf="modalImage" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-8"
+        (click)="modalImage = null">
+        <img [src]="modalImage" class="w-[95%] h-auto max-w-2xl max-h-[85vh] rounded-lg shadow-lg" />
+      </div>-->
+    </div>
+
+
+
+    <!-- Bisnis Inti Full Width -->
+    <div formArrayName="bisnisInti" class="col-span-1 md:col-span-3">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4 pt-2 border-t border-gray-200">Pilih Bisnis Inti</h3>
+      <div
+        *ngIf="vprodlist && vprodlist.length > 0 && bisnisIntiControls.length === vprodlist.length; else noDataBisnis">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div *ngFor="let control of bisnisIntiControls; let i = index"
+            class="flex items-center p-3 border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-all duration-200 ease-in-out bg-white cursor-pointer hover:bg-indigo-50 focus-within:ring-2 focus-within:ring-indigo-500">
+            <input type="checkbox" [id]="'product-' + vprodlist[i].cmprCode + '-' + i" [formControlName]="i"
+              class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer">
+            <label [for]="'product-' + vprodlist[i].cmprCode + '-' + i"
+              class="ml-3 block text-sm font-medium text-gray-700 cursor-pointer truncate select-none flex-1"
+              [title]="vprodlist[i].cmprName"> {{ vprodlist[i].cmprName }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Tombol Simpan di Paling Bawah -->
+    <div class="col-span-1 md:col-span-3 text-left pt-6">
+      <button mat-raised-button color="primary" (click)="submitCustGen()">Simpan</button>
+    </div>
+  </form>
+
+  <ng-template #noDataBisnis>
+    <div class="text-center text-gray-500 py-6 px-4 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+      <mat-icon class="text-4xl text-gray-400 mb-2">info_outline</mat-icon>
+      <p>Tidak ada data bisnis inti untuk ditampilkan atau sedang memuat...</p>
+    </div>
+  </ng-template>
+</div>

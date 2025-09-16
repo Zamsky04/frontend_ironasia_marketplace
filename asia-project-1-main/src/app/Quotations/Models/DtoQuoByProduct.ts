@@ -1,0 +1,23 @@
+export interface DtoQuoByProduct {
+ctqdCtqhId: string,
+ctqdId: string,
+ctqdProductCode: number,
+ctqdProductName: string,
+ctqdProducttypeCode: number,
+ctqdProducttypeName: string,
+ctqdProducttypePrice: number,
+ctqdProducttypeQty: number,
+ctqdProducttypeMinQty: number,
+ctqdProducttypeMaxPrice: number,
+ctqdProducttypeDesc: string,
+ctqdProductTypeSize: string,
+ctqdProductTypeSpec: string,
+ctqdProductTypeAlias: string,
+quotationProductImage1: string,
+quotationProductImage2: string,
+quotationProductImage3: string,
+quotationProductImage4: string,
+ctqdNewUsed: string,
+ctqdStatus: string,
+ctqdNotes: string
+}
