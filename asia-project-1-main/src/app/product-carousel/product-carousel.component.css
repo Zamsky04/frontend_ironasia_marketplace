@@ -1,37 +1,63 @@
-.product-card{
-    z-index: 1 !important;
-}
-.product-card:hover{
-    border-color: var(--primaryColor) !important;
-}
-.product-card:hover .title-card{
-    color: var(--primaryColor) !important;
-}
+/* Kartu konsisten */
+.product-card{ display:flex; flex-direction:column; height:100% }
+.product-card-wrapper{ height:100% }
+
+/* Gambar: seragam dengan aspect-ratio */
 .product-image{
-    margin-bottom: 5px;
+  width:100%;
+  aspect-ratio: 16/10;
+  background:#f8fafc;
 }
+.product-image img{ width:100%; height:100%; object-fit:cover; display:block }
+
+/* Konten */
 .product-content{
-    display: flex;
-    flex-direction:column;
-    border-top: 1px solid #dddddd;
-    font-family: var(--fontFamily);
-}
-.title-card{
-    font-size: 0.9rem;
-    display: block;
-    font-family: var(--fontFamily);
-    margin-bottom: 12px;
-}
-.product-image img{
-    height: 150px !important;
-}
-.product-content .product-price{
-    font-family: var(--fontFamily);
-    font-size: 0.8rem;
-    color: var(--primaryColor);
+  display:flex; flex-direction:column; flex:1 1 auto;
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+  font-family: var(--fontFamily, Inter, system-ui, sans-serif);
 }
 
-.product-carousel .p-carousel-item {
+.title-card{
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  overflow:hidden;
+  font-weight:600;
+  font-size:.95rem;
+  color:#0f172a;
+  text-decoration:none;
+  margin-bottom: .25rem;
+}
+.product-card:hover .title-card{ color:#4f46e5 }
+
+/* Meta line */
+.meta-line{
+  display:grid; grid-template-columns: repeat(2,minmax(0,1fr));
+  gap:.5rem; font-size: .75rem; color:#475569; margin-bottom:.25rem;
+}
+.meta-line .pair{ display:flex; align-items:center; gap:.25rem }
+.meta-line i{ color:#64748b }
+
+/* Lokasi */
+.location{
+  display:flex; align-items:center; gap:.5rem;
+  color:#475569; font-size:.75rem; margin-bottom:.5rem; min-height:1.25rem;
+}
+.location i{ color:#64748b }
+
+/* CTA di bawah */
+.cta{ margin-top:auto; padding-top:.5rem }
+.product-price{ display:block; color:#4f46e5; font-weight:700; font-size:1rem; margin-bottom:.5rem }
+
+/* PrimeNG item width: 3 kolom desktop */
+.product-carousel .p-carousel-item{
   flex: 0 0 calc(100% / 3);
   max-width: calc(100% / 3);
+}
+
+/* Tablet 2 kolom, Mobile 1 kolom */
+@media (max-width: 1024px){
+  .product-carousel .p-carousel-item{ flex:0 0 50%; max-width:50% }
+}
+@media (max-width: 640px){
+  .product-carousel .p-carousel-item{ flex:0 0 100%; max-width:100% }
 }

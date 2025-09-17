@@ -1,15 +1,12 @@
 <div class="py-4 md:py-6 px-2 bg-slate-50 mb-6">
   <div class="mb-6 flex flex-col sm:flex-row justify-between sm:items-center px-2">
     <div>
-      <h2 class="text-2xl font-bold text-slate-800">
-        {{ title }}
-      </h2>
-      <h5 class="text-sm text-slate-600 mt-px max-w-xl">
-      {{ desc }}
-      </h5>
+      <h2 class="text-2xl font-bold text-slate-800">{{ title }}</h2>
+      <h5 class="text-sm text-slate-600 mt-px max-w-xl">{{ desc }}</h5>
     </div>
-    <a href="#" (click)="onViewMoreClick($event)" 
-      class="text-sm text-indigo-600 hover:text-indigo-700 font-medium no-underline transition-colors duration-150 flex items-center group">
+
+    <a href="#" (click)="onViewMoreClick($event)"
+       class="text-sm text-indigo-600 hover:text-indigo-700 font-medium no-underline transition-colors duration-150 flex items-center group">
       View More
       <i class="pi pi-arrow-right ml-1 transform transition-transform duration-150 group-hover:translate-x-1"></i>
     </a>
@@ -26,64 +23,56 @@
     [responsiveOptions]="responsiveOptions"
   >
     <ng-template let-product pTemplate="item">
-     <div class="product-card-wrapper p-2">
-       <div class="product-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 ease-in-out overflow-hidden flex flex-col h-full">
+      <div class="product-card-wrapper p-2">
+        <div class="product-card bg-white rounded-xl border border-slate-200 hover:border-indigo-500 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col h-full">
 
-         <div class="product-image relative w-full h-39">
-           <a href="#" class="block w-full h-full">
-             <img
-               src="{{ product.images?.[0]?.itemImageSrc || 'assets/placeholder.png' }}"
-               alt="{{ product.dctwProductName }}"
-               class="w-full h-full object-cover rounded-t-xl"
-             />
-           </a>
-         </div>
+          <div class="product-image">
+            <img
+              [src]="product?.images?.[0]?.itemImageSrc || 'assets/placeholder.png'"
+              [alt]="product?.dctwProductName || 'Product'"
+            />
+          </div>
 
-         <div class="product-content p-4 flex flex-col flex-grow">
-           <a
-             href="#"
-             class="title-card text-md font-semibold text-slate-700 hover:text-indigo-600 block mb-0.1 leading-tight h-6"
-             title="{{ product.dctwProductTypeSpec }}"
-           >
-             {{ product.dctwProductTypeSpec | truncate:17 }}
-           </a>
+          <div class="product-content">
+            <a class="title-card" [title]="product?.dctwProductTypeSpec">
+              {{ product?.dctwProductTypeSpec }}
+            </a>
 
-           <div class="**mb-1** flex flex-row flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-600">
-             <div class="flex items-center" pTooltip="Stock Available">
-               <i class="pi pi-box mr-1 text-slate-500"></i>
-               <span>{{ product.dctwProducttypeStockQty }}</span>
-             </div>
-             <div class="flex items-center" pTooltip="Minimum Purchase">
-               <i class="pi pi-info-circle mr-1 text-slate-500"></i>
-               <span>{{ product.dctwProducttypeMinQty }}</span>
-             </div>
-           </div>
+            <div class="meta-line">
+              <div class="pair" pTooltip="Stock Available">
+                <i class="pi pi-box"></i><span>{{ product?.dctwProducttypeStockQty }}</span>
+              </div>
+              <div class="pair" pTooltip="Minimum Purchase">
+                <i class="pi pi-info-circle"></i><span>{{ product?.dctwProducttypeMinQty }}</span>
+              </div>
+            </div>
 
-           <div class="flex items-center text-xs text-slate-600 mb-2 min-h-[1.5rem]">
-             <i class="pi pi-map-marker mr-2 text-slate-500"></i>
-             <span class="truncate" title="{{ product.dctwProvince }}">{{ product.dctwProvince }}</span>
-           </div>
+            <div class="location">
+              <i class="pi pi-map-marker"></i>
+              <span class="truncate" [title]="product?.dctwProvince">{{ product?.dctwProvince }}</span>
+            </div>
 
-           <div class="mt-auto pt-2">
-             <span class="product-price text-xl font-bold text-indigo-600 block mb-2">
-               {{ product.dctwProducttypePrice | currency : "IDR " : "symbol" : "1.0-0" }}
-             </span>
-             <button
-               pButton
-               pRipple
-               type="button"
-               label="Shop Now"
-               icon="pi pi-shopping-cart"
-               iconPos="right"
-               (click)="openDrawer(product)"
-               class="p-button-sm w-full"
+            <div class="cta">
+              <span class="product-price">
+                {{ product?.dctwProducttypePrice | currency : 'IDR ' : 'symbol' : '1.0-0' }}
+              </span>
+              <button
+                pButton
+                pRipple
+                type="button"
+                label="Shop Now"
+                icon="pi pi-shopping-cart"
+                iconPos="right"
+                (click)="openDrawer(product)"
+                class="p-button-sm w-full"
                 pTooltip="Belanja Sekarang"
-                tooltipPosition="top"               
-             ></button>
-           </div>
-         </div>
-       </div>
-     </div>
-   </ng-template>
+                tooltipPosition="top"
+                [style]="{ 'background-color': '#0056d6', border: 'none' }"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
   </p-carousel>
 </div>
