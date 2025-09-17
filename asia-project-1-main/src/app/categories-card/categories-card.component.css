@@ -59,3 +59,102 @@ span{
   font-weight: 400 !important; /* <-- Hati-hati jika ingin diatur Tailwind, !important bisa jadi masalah */
 }
 
+/* =========================
+   MOBILE OVERRIDES (≤ 767px)
+   ========================= */
+@media (max-width: 767px){
+
+  /* Kartu jadi ringan & auto height (desktop rules tetap utuh di >767px) */
+  .single-categories{
+    padding: 12px !important;
+    margin: 8px !important;
+    border-radius: 12px;
+    height: auto !important;
+    padding-right: 12px !important; /* override padding-right 180px */
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0,0,0,.04);
+  }
+
+  /* Segitiga dekoratif dimatikan di mobile */
+  .single-categories::before{
+    content: none !important;
+  }
+
+  /* Blok atas (gambar + title) jadi satu baris rapi */
+  .single-categories > div:first-child{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Gambar: inline, bukan absolute */
+  .single-categories a img{
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    width: 84px !important;
+    height: 84px !important;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.06);
+  }
+
+  /* Judul: rapat & aman untuk nama panjang */
+  .single-categories h3{
+    margin: 0 !important;
+    font-size: 18px !important;
+    line-height: 1.25;
+    color: var(--headingColor);
+    /* clamp 2 baris supaya rapi */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Baris bawah (count + tombol) tetap satu baris, wrap kalau sempit */
+  .single-categories .mt-auto{
+    margin-top: 8px !important;
+    padding-top: 8px !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Count */
+  .single-categories span{
+    margin: 0 !important;
+    font-size: 14px !important;
+    color: var(--secondaryColor);
+  }
+
+  /* Tombol “Details” stabil (tanpa konflik !important sebelumnya) */
+  .single-categories .read-now{
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 12px !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--primaryColor) !important;
+    background: transparent !important;
+    color: var(--primaryColor) !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    text-decoration: none !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+    transition: background-color .2s ease, color .2s ease, transform .2s ease;
+  }
+  .single-categories .read-now:hover,
+  .single-categories .read-now:focus-visible{
+    background: var(--primaryColor) !important;
+    color: #fff !important;
+    transform: translateY(-1px);
+    outline: 2px solid rgba(51,95,217,.25);
+    outline-offset: 2px;
+  }
+}
+
