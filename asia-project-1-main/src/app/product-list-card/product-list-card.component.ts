@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
@@ -12,7 +12,8 @@ import { AuthService } from '../services/auth.service';
   selector: 'app-product-list-card',
   imports: [CommonModule, ButtonModule, Tooltip],
   templateUrl: './product-list-card.component.html',
-  styleUrl: './product-list-card.component.css'
+  styleUrl: './product-list-card.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class ProductListCardComponent {
    @Input() products: any[] = [];
@@ -24,6 +25,7 @@ export class ProductListCardComponent {
   vusnm:any;
   vusurl:any;
   vusr:any;
+  hover = false;
 
   constructor(private logserv:ServLoginService, private dialog: MatDialog,private authService: AuthService,
   ) { }
@@ -38,15 +40,16 @@ export class ProductListCardComponent {
      }
   }
 
+  trackByProductId = (_: number, p: any) => p?.id ?? p?.dctwProductTypeSpec ?? _;
   login() {
   //  event.preventDefault();
     const dialogRef = this.dialog.open(LoginCompComponent, {
-      height: 'auto', 
-      maxWidth: '300px', 
-      width: '80%', 
-      panelClass: 'custom-dialog-container' 
+      height: 'auto',
+      maxWidth: '300px',
+      width: '80%',
+      panelClass: 'custom-dialog-container'
     });
-  
+
     dialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
@@ -72,7 +75,7 @@ export class ProductListCardComponent {
         }
       }
     });
-  } 
+  }
 
-   
+
 }

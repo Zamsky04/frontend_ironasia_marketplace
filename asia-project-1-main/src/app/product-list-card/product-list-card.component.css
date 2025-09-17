@@ -1,9 +1,31 @@
 :host ::ng-deep .product-price {
     font-family: var(--fontFamily);
   }
-  
+
   :host ::ng-deep .title-card {
     font-size: 0.9rem;
     font-family: var(--fontFamily);
   }
-  
+
+  /* Tombol beli: hover rapi tanpa inline styles */
+.btn-shop {
+  background-color: #0056d6 !important;
+  border-color: #0056d6 !important;
+  color: #ffffff !important;
+  transition: background .2s ease, border-color .2s ease;
+}
+
+.btn-shop:hover,
+.btn-shop:focus {
+  background-color: #0040a8 !important;
+  border-color: #0040a8 !important;
+  color: #ffffff !important;
+}
+
+/* Judul card satu baris, potong rapi bila panjang */
+.title-card {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;      /* ubah ke 1 jika mau satu baris saja */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
