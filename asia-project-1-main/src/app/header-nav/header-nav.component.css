@@ -90,10 +90,6 @@
     transition: transform 0.3s ease;
 }
 
-.account-dropdown:hover .dropdown-icon {
-    transform: rotate(180deg);
-}
-
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -153,4 +149,14 @@
 .account-dropdown.right-align .dropdown-menu {
     left: auto;
     right: 0;
+}
+
+.account-dropdown .dropdown-icon{
+  transition: transform .2s ease;
+  transform: rotate(0deg);
+}
+
+/* Saat dropdown OPEN (class .open dipasang di <button>) */
+.account-dropdown .my-account.open .dropdown-icon{
+  transform: rotate(180deg);
 }

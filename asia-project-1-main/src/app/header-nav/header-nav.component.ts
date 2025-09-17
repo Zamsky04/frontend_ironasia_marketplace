@@ -1,4 +1,4 @@
-import {  Component, inject, OnInit } from '@angular/core';
+import {  Component, inject, OnInit, HostListener, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import {   RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -40,16 +40,12 @@ export class HeaderNavComponent implements OnInit  {
   private subscription2!: Subscription;
 
 
- constructor(private dialog: MatDialog, private logserv:ServLoginService, 
-  private shopDrawService: ShopDrawServService ) { 
-  }
-
- ngOnInit() {   
-   this.subscription2 = this.logserv.callMethodObservablenavbarlogout.subscribe(() => {   
+ ngOnInit() {
+   this.subscription2 = this.logserv.callMethodObservablenavbarlogout.subscribe(() => {
       this.log_info();
     });
-    
-    this.subscription = this.logserv.callMethodObservable.subscribe(() => {   
+
+    this.subscription = this.logserv.callMethodObservable.subscribe(() => {
       this.log_info();
     });
 
@@ -95,15 +91,15 @@ export class HeaderNavComponent implements OnInit  {
       this.mypp = 'assets/user.png';
     }
 }
- 
-  log_info(){    
+
+  log_info(){
     this.vusrnm=localStorage.getItem('usnm');
     this.vusrurl=localStorage.getItem('usrimg');
     this.vusrd=localStorage.getItem('uscd');
- 
-    if (this.vusrnm){     
+
+    if (this.vusrnm){
         this.vusnm=this.vusrnm;
-        this.vusurl=this.vusrurl;    
+        this.vusurl=this.vusrurl;
         this.vusr=this.logserv.decrypt(this.vusrd);
 
         this.logserv.updatemyacc(this.vusnm);
@@ -123,8 +119,8 @@ export class HeaderNavComponent implements OnInit  {
     localStorage.removeItem('picnm');
     localStorage.removeItem('uscd');
     localStorage.removeItem('usnm');
-    localStorage.removeItem('usrimg'); 
-    localStorage.removeItem('typeb'); 
+    localStorage.removeItem('usrimg');
+    localStorage.removeItem('typeb');
 
     this.myacc="My Account";
       this.mypp="assets/user.png";
@@ -133,13 +129,13 @@ export class HeaderNavComponent implements OnInit  {
  login(event: Event) {
   event.preventDefault();
   const dialogRef = this.dialog.open(LoginCompComponent, {
-    height: 'auto', 
+    height: 'auto',
     maxWidth: '300px',
-                     
-    width: '80%',  
+
+    width: '80%',
     disableClose: true,
-    panelClass: 'custom-dialog-container' 
-                                       
+    panelClass: 'custom-dialog-container'
+
   });
 
   dialogRef.afterClosed().subscribe({
@@ -187,16 +183,16 @@ export class HeaderNavComponent implements OnInit  {
         next:(val) =>{
           if (val) {
            // this.getListFaktur();
-            //localStorage.setItem("dsono", this.dtparam);  
-  
+            //localStorage.setItem("dsono", this.dtparam);
+
           }
         }
-      });      
+      });
   };
 
    testProtectedApi() {
     console.log("Mencoba memanggil API terproteksi SEKARANG...");
-    
+
     // Panggil salah satu API yang sebelumnya gagal, misalnya getcartList
     // Ganti 'bbbb1' dan 'N' dengan data tes yang valid jika perlu
     this.shopDrawService.getcartList('bbbb1', 'N').subscribe({
@@ -218,40 +214,100 @@ export class HeaderNavComponent implements OnInit  {
 about(event: Event) {
   event.preventDefault();
   const dialogRef = this.dialog.open(AboutComponent, {
-    height: 'auto', 
+    height: 'auto',
     maxWidth: '300px',
-                     
-    width: '80%',  
+
+    width: '80%',
     disableClose: true,
-    panelClass: 'custom-dialog-container' 
-                                       
+    panelClass: 'custom-dialog-container'
+
   });
 }
 
 rfq(event: Event) {
   event.preventDefault();
   const dialogRef = this.dialog.open(RfqComponent, {
-    height: 'auto', 
+    height: 'auto',
     maxWidth: '300px',
-                     
-    width: '80%',  
+
+    width: '80%',
     disableClose: true,
-    panelClass: 'custom-dialog-container' 
-                                       
+    panelClass: 'custom-dialog-container'
+
   });
 }
 
 help(event: Event) {
   event.preventDefault();
   const dialogRef = this.dialog.open(HelpComponent, {
-    maxHeight: '90vh', 
+    maxHeight: '90vh',
     maxWidth: '700px',
     width: '90%',
     disableClose: true,
     panelClass: 'custom-dialog-container',
-      autoFocus: 'h2', 
+      autoFocus: 'h2',
   });
 }
+isAccountOpen = false;
+
+  constructor(
+    private dialog: MatDialog,
+    private logserv: ServLoginService,
+    private shopDrawService: ShopDrawServService,
+    private router: Router,
+    private el: ElementRef
+  ) {}
+
+  // === klik di luar -> tutup dropdown
+  @HostListener('document:click', ['$event'])
+  onDocClick(ev: MouseEvent) {
+    if (this.isAccountOpen && !this.el.nativeElement.contains(ev.target)) {
+      this.isAccountOpen = false;
+    }
+  }
+
+  onAccountClick(event: Event) {
+    event.preventDefault();
+    if (this.myacc === 'My Account') {
+      this.login(event);
+      this.isAccountOpen = false;
+      return;
+    }
+    this.isAccountOpen = !this.isAccountOpen;
+  }
+
+  private openInNewTab(path: string): void {
+    const url = this.router.serializeUrl(this.router.createUrlTree([path]));
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  openCustomerProfile(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isAccountOpen = false;
+    this.openInNewTab('/CustomerProfile');
+  }
+
+  logout(event: Event) {
+    event.preventDefault();
+    // bersihkan storage & state
+    localStorage.removeItem('picnm');
+    localStorage.removeItem('uscd');
+    localStorage.removeItem('usnm');
+    localStorage.removeItem('usrimg');
+    localStorage.removeItem('typeb');
+
+    this.myacc = 'My Account';
+    this.mypp  = 'assets/user.png';
+    this.isAccountOpen = false;
+
+    // kalau ada notifikasi logout di service-mu, panggil di sini (opsional)
+    // this.logserv.notifyLoggedOut?.();
+
+    // redirect ringan (opsional)
+    this.router.navigate(['/']);
+  }
+
 
 
 

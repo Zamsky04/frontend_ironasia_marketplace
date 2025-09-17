@@ -2,43 +2,53 @@
   <div class="top-header">
     <div class="container mx-auto px-8">
       <div class="flex flex-wrap flex-row justify-between text-center">
-        <ul class="flex flex-wrap flex-row justify-center md:justify-start gap-4 header-left-content ">
-  <li><a href="#" (click)="about($event)">About</a></li>
-  <li><a href="#" (click)="rfq($event)">Request For Quotation</a></li>   
-  <li><a href="#" (click)="help($event)">Need Help</a></li> 
-</ul>
-        <ul
-          class="flex flex-wrap flex-row justify-center w-full md:w-auto mt-2 md:mt-0 header-right-content"
-        >
-        <li class="account-dropdown">
-  <a href="#" class="my-account" [class.no-click]="myacc !== 'My Account'">
-    <ng-container *ngIf="myacc === 'My Account'; else loggedInState">
-      <p-avatar icon="pi pi-user" styleClass="mr-2" shape="circle"></p-avatar>
-    </ng-container>
-    <ng-template #loggedInState>
-      <img [src]="mypp" (error)="onImageError($event)" alt="User Avatar" class="account-logo" />
-    </ng-template>
+        <!-- LEFT -->
+        <ul class="flex flex-wrap flex-row justify-center md:justify-start gap-4 header-left-content">
+          <li><a href="#" (click)="about($event)">About</a></li>
+          <li><a href="#" (click)="rfq($event)">Request For Quotation</a></li>
+          <li><a href="#" (click)="help($event)">Need Help</a></li>
+        </ul>
 
-    <span class="account-name">{{ myacc }}</span>
-    <i class="ri-arrow-down-s-line dropdown-icon"></i>
-  </a>
+        <!-- RIGHT -->
+        <ul class="flex flex-wrap flex-row justify-center w-full md:w-auto mt-2 md:mt-0 header-right-content">
+          <li class="account-dropdown right-align" (click)="$event.stopPropagation()">
+            <button
+              type="button"
+              class="my-account"
+              [class.no-click]="myacc !== 'My Account'"
+              [class.open]="isAccountOpen"
+              (click)="onAccountClick($event)"
+              (keydown.enter)="onAccountClick($event)"
+              (keydown.space)="onAccountClick($event)"
+              [attr.aria-expanded]="isAccountOpen"
+              aria-haspopup="true"
+              [attr.aria-controls]="'acc-menu'"
+            >
+              <ng-container *ngIf="myacc === 'My Account'; else loggedInState">
+                <p-avatar icon="pi pi-user" styleClass="mr-2" shape="circle"></p-avatar>
+              </ng-container>
+              <ng-template #loggedInState>
+                <img [src]="mypp" (error)="onImageError($event)" alt="User Avatar" class="account-logo" />
+              </ng-template>
 
-  <ul class="dropdown-menu">
-    
-    <ng-container *ngIf="myacc === 'My Account'">
-      <li>
-        <a href="#" (click)="login($event)"><i class="ri-login-box-line"></i> Login</a>
-      </li>
-      <li>
-        <a href="#" (click)="registration($event)"><i class="ri-user-add-line"></i> Sign Up</a>
-      </li>
-    </ng-container>
+              <span class="account-name">{{ myacc }}</span>
+              <i class="ri-arrow-down-s-line dropdown-icon"></i>
+            </button>
 
-    <ng-container *ngIf="myacc !== 'My Account'">
-      </ng-container>
+            <ul class="dropdown-menu" *ngIf="isAccountOpen" [attr.id]="'acc-menu'">
+              <!-- BELUM LOGIN -->
+              <ng-container *ngIf="myacc === 'My Account'; else loggedInMenu">
+                <li><a href="" (click)="login($event)"><i class="ri-login-box-line"></i> Login</a></li>
+                <li><a href="" (click)="registration($event)"><i class="ri-user-add-line"></i> Sign Up</a></li>
+              </ng-container>
 
-  </ul>
-</li>
+              <!-- SUDAH LOGIN -->
+              <ng-template #loggedInMenu>
+                <li><a [attr.href]="'javascript:void(0)'" (click)="openCustomerProfile($event); false"><i class="ri-user-3-line"></i> Customer Profile</a></li>
+                <li><a href="" (click)="logout($event)"><i class="ri-logout-box-r-line"></i> Log Out</a></li>
+              </ng-template>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>
