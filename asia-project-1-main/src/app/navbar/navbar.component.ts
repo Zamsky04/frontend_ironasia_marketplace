@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
-import { MegaMenuItem, MenuItemCommandEvent } from 'primeng/api'; 
+import { CommonModule } from '@angular/common';
+import { MegaMenuItem, MenuItemCommandEvent } from 'primeng/api';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
@@ -18,22 +18,23 @@ import { MainHomeServService } from '../Home/Services/main-home-serv.service';
 import { notifications } from '../Home/Models/notifications';
 import { AuthService } from '../services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterModule, 
-    MegaMenuModule, 
-    AvatarGroupModule, 
-    AvatarModule, 
-    OverlayBadgeModule, 
-    PopoverModule, 
-    IconFieldModule, 
-    InputIconModule, 
-    HeaderNavComponent, 
+    CommonModule,
+    RouterModule,
+    MegaMenuModule,
+    AvatarGroupModule,
+    AvatarModule,
+    OverlayBadgeModule,
+    PopoverModule,
+    IconFieldModule,
+    InputIconModule,
+    HeaderNavComponent,
     DataViewModule,
     FormsModule
   ],
@@ -64,7 +65,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   searchTerm: string = '';
   isSearchInputTooLong: boolean = false;
   private broadcastChannel: BroadcastChannel;
-  isMegaMenuVisible: boolean = false; 
+  isMegaMenuVisible: boolean = false;
   private subscription!: Subscription;
   private cartUpdateSubscription!: Subscription;
   typeb :any;
@@ -74,10 +75,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private router: Router, 
-    private logserv: ServLoginService, 
-    private _cartserv: ShopDrawServService, 
-    private _mainserv: MainHomeServService, 
+    private router: Router,
+    private logserv: ServLoginService,
+    private _cartserv: ShopDrawServService,
+    private _mainserv: MainHomeServService,
     private authService: AuthService
   ) {
     this.broadcastChannel = new BroadcastChannel('cart_update_channel');
@@ -89,8 +90,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
        this.initializeMenu();
   //  }else{
    //    this.initializeMenu2();
-  //  }   
-   
+  //  }
+
     this.getCartList();
     this.getNotificationList();
 
@@ -108,7 +109,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         console.log('Navbar (Tab Lain): Menerima siaran, memuat ulang keranjang...');
         this.getCartList();
       }
-    };    
+    };
   }
 
   ngOnDestroy(): void {
@@ -125,8 +126,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.vusrurl = localStorage.getItem('usrimg') || '';
      this.typeb=localStorage.getItem('typeb');
     this.vusrd = localStorage.getItem('uscd');
-   
-    
+
+
     this.vusnm = this.vusrnm;
     this.vusurl = this.vusrurl;
     if (this.vusrd) {
@@ -139,13 +140,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  
+
   handleMenuClick(event: MenuItemCommandEvent, action: string, param?: any): void {
-    
+
     if (event.originalEvent) {
       event.originalEvent.preventDefault();
     }
-    
+
     switch (action) {
       case 'navigate':
         this.openMenuInNewTab(param);
@@ -175,7 +176,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
               label: 'Inquiries',
               items: [
                 { label: 'Custom Inquiries', command: (e) => this.handleMenuClick(e, 'navigate', 'sellerquotationmanuallist')},
-                { label: 'Product Inquiries', command: (e) => this.handleMenuClick(e, 'navigate', 'sellerquotationslist')}, 
+                { label: 'Product Inquiries', command: (e) => this.handleMenuClick(e, 'navigate', 'sellerquotationslist')},
               ],
             },
           ],
@@ -198,8 +199,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
             {
               label: '',
               items: [
-                { label: 'RFQ from Catalog', command: (e) => this.handleMenuClick(e, 'navigate', 'quotationslist') }, 
-                { label: 'Review Offers for Catalog RFQ', command: (e) => this.handleMenuClick(e, 'navigate', 'resultquotationslist') }, 
+                { label: 'RFQ from Catalog', command: (e) => this.handleMenuClick(e, 'navigate', 'quotationslist') },
+                { label: 'Review Offers for Catalog RFQ', command: (e) => this.handleMenuClick(e, 'navigate', 'resultquotationslist') },
               ],
             },
           ],
@@ -213,7 +214,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
             {
               label: 'Customer Detail',
               items: [
-                { label: 'Customer Profile', command: (e) => this.handleMenuClick(e, 'navigate', 'customerprofile') }, 
+                { label: 'Customer Profile', command: (e) => this.handleMenuClick(e, 'navigate', 'customerprofile') },
               ],
             },
           ],
@@ -221,7 +222,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
             {
               label: 'Security',
               items: [
-                { label: 'Log Out', command: (e) => this.handleMenuClick(e, 'logout') }, 
+                { label: 'Log Out', command: (e) => this.handleMenuClick(e, 'logout') },
               ]
             },
           ],
@@ -231,7 +232,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }*/
 
  initializeMenu() {
-  const sellerInquiriesColumn = 
+  const sellerInquiriesColumn =
     this.typeb === '(C)'
       ? {
           label: '',
@@ -239,31 +240,31 @@ export class NavbarComponent implements OnInit, OnDestroy {
             {
               label: 'Inquiries',
               styleClass: 'disabled-link',
-              command: () => this.showNIBMessage() 
+              command: () => this.showNIBMessage()
             }
           ]
         }
       : {
           label: 'Inquiries',
           items: [
-            { 
-              label: 'Custom Inquiries', 
-              command: (e: MenuItemCommandEvent) => this.handleMenuClick(e, 'navigate', 'sellerquotationmanuallist') 
+            {
+              label: 'Custom Inquiries',
+              command: (e: MenuItemCommandEvent) => this.handleMenuClick(e, 'navigate', 'sellerquotationmanuallist')
             },
-            { 
-              label: 'Product Inquiries', 
-              command: (e: MenuItemCommandEvent) => this.handleMenuClick(e, 'navigate', 'sellerquotationslist') 
-            }, 
+            {
+              label: 'Product Inquiries',
+              command: (e: MenuItemCommandEvent) => this.handleMenuClick(e, 'navigate', 'sellerquotationslist')
+            },
           ],
         };
 
-  const requestForQuotationsMenu: MegaMenuItem = 
-    this.typeb === '(C)' 
+  const requestForQuotationsMenu: MegaMenuItem =
+    this.typeb === '(C)'
       ? {
           label: 'Request For Quotations',
           icon: 'pi pi-mobile',
           styleClass: 'disabled-link',
-          command: () => this.showNIBMessage() 
+          command: () => this.showNIBMessage()
         }
       : {
           label: 'Request For Quotations',
@@ -304,8 +305,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
         ],
       ],
     },
-    
-    requestForQuotationsMenu, 
+
+    requestForQuotationsMenu,
 
     {
       label: 'Profile',
@@ -326,7 +327,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
  showNIBMessage(): void {
     alert('Please complete your NIB data in your profile to use this feature or contact admin for assistance.');
-    
+
   }
 
 
@@ -346,7 +347,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         if (product.cartProductImage2) images.push({ itemImageSrc: product.cartProductImage2 });
         if (product.cartProductImage3) images.push({ itemImageSrc: product.cartProductImage3 });
         if (product.cartProductImage4) images.push({ itemImageSrc: product.cartProductImage4 });
-        
+
         return {
           name: product.cartProductName,
           description: product.cartProductDesc,
@@ -368,10 +369,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       resultquotationslist: '/inquiry-results-list',
       resultquotationmanuallist: '/inquiry-results-manual-list',
       customerprofile: '/CustomerProfile',
-    }; 
+    };
     if (routes[menuLabel]) {
       const route = this.router.serializeUrl(this.router.createUrlTree([routes[menuLabel]]));
-      window.open(route, '_blank'); 
+      window.open(route, '_blank');
     } else {
       console.warn(`No route defined for menu: ${menuLabel}`);
     }
@@ -400,7 +401,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         typeDescription: this.getNotificationTypeDescription(n.ctnotifType)
       }));
     });
-  } 
+  }
 
   getNotificationTypeDescription(type: string): string {
     switch (type) {
@@ -434,19 +435,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  logout(): void { 
+  logout(): void {
     localStorage.removeItem('uscd');
-    localStorage.removeItem('picnm');     
+    localStorage.removeItem('picnm');
     localStorage.removeItem('usnm');
-    localStorage.removeItem('usrimg'); 
+    localStorage.removeItem('usrimg');
     localStorage.removeItem('typeb');
     this.notificationItems = [];
-    this.notif = []; 
-    this.cartItems = []; 
+    this.notif = [];
+    this.cartItems = [];
     this.authService.execLogout();
     this.isMegaMenuVisible = false;
     this.callothermethodheadernalogout();
-    this.vusr = null; 
+    this.vusr = null;
     this.vusrd = null;
   }
 
@@ -470,4 +471,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   onSearchInput(): void {
     this.isSearchInputTooLong = this.searchTerm.length >= 60;
   }
+
+  goHome(): void {
+  if (this.router.url === '/mainhome' || this.router.url === '/') {
+    window.location.href = '/mainhome';
+  } else {
+    this.router.navigateByUrl('/mainhome');
+  }
+}
 }
