@@ -56,7 +56,7 @@ app.use('/**', (req, res, next) => {
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
   app.listen(port, () => {
-    console.log(`Node Express server listening on http://193.111.124.45:${port}`);
+    console.log(`Node Express server listening on http://45.158.10.75:${port}`);
   });
 }
 
