@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MegaMenuItem, MenuItemCommandEvent } from 'primeng/api';
 import { MegaMenuModule } from 'primeng/megamenu';
@@ -19,7 +19,12 @@ import { notifications } from '../Home/Models/notifications';
 import { AuthService } from '../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { AboutComponent } from '../Home/about/about.component';
+import { HelpComponent } from '../Home/help/help.component';
+import { RfqComponent } from '../Home/rfq/rfq.component';
+import { LoginCompComponent } from '../login/Components/login-comp/login-comp.component';
+import { CompRegisComponent } from '../Registration/Components/comp-regis/comp-regis.component';
 
 @Component({
   selector: 'app-navbar',
@@ -36,7 +41,8 @@ import { RouterLink } from '@angular/router';
     InputIconModule,
     HeaderNavComponent,
     DataViewModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
@@ -70,6 +76,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private cartUpdateSubscription!: Subscription;
   typeb :any;
 
+  mobileMenuOpen = false;
+  mobileSections: Record<string, boolean> = { seller: false, rfq: false, profile: false };
+  get isTypeC(): boolean { return this.typeb === '(C)'; }
+
+  mypp: string = 'assets/user.png';
+
   get cartTotal(): number {
     return this.cartItems.reduce((total, item) => total + item.qty * item.price, 0);
   }
@@ -79,7 +91,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private logserv: ServLoginService,
     private _cartserv: ShopDrawServService,
     private _mainserv: MainHomeServService,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {
     this.broadcastChannel = new BroadcastChannel('cart_update_channel');
   }
@@ -121,41 +134,76 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
+  @HostListener('document:keydown.escape', ['$event'])
+  onEsc(e: KeyboardEvent) {
+    if (this.mobileMenuOpen) {
+      this.toggleMobileMenu(false);
+    }
+  }
+
+  toggleMobileMenu(open: boolean) {
+    this.mobileMenuOpen = open;
+    document.body.style.overflow = open ? 'hidden' : '';
+    if (open) {
+      this.mobileSections = { seller: false, rfq: false, profile: false };
+    }
+  }
+
+  toggleSection(key: 'seller' | 'rfq' | 'profile') {
+    this.mobileSections[key] = !this.mobileSections[key];
+  }
+
+  handleNavigate(menuLabel: string) {
+    this.openMenuAdaptive(menuLabel);
+    this.toggleMobileMenu(false);
+  }
+
   checkUserStatus() {
     this.vusrnm = localStorage.getItem('usnm') || '';
     this.vusrurl = localStorage.getItem('usrimg') || '';
-     this.typeb=localStorage.getItem('typeb');
-    this.vusrd = localStorage.getItem('uscd');
-
+    this.typeb   = localStorage.getItem('typeb');
+    this.vusrd   = localStorage.getItem('uscd');
 
     this.vusnm = this.vusrnm;
     this.vusurl = this.vusrurl;
+
     if (this.vusrd) {
-        this.vusr = this.logserv.decrypt(this.vusrd);
-        this.isMegaMenuVisible = true;
-        this.myacc = this.vusnm;
+      this.vusr = this.logserv.decrypt(this.vusrd);
+      this.isMegaMenuVisible = true;
+      this.myacc = this.vusnm;
+
+      // ⬇️ Tambahan penting
+      this.mypp = (this.vusurl && this.vusurl !== 'null' && this.vusurl.trim() !== '')
+        ? this.vusurl
+        : 'assets/user.png';
     } else {
-        this.isMegaMenuVisible = false;
-        this.myacc = 'My Account';
+      this.isMegaMenuVisible = false;
+      this.myacc = 'My Account';
+      // ⬇️ Tambahan penting
+      this.mypp  = 'assets/user.png';
     }
   }
 
+  onImageError(e: Event) {
+    (e.target as HTMLImageElement).src = 'assets/user.png';
+  }
 
   handleMenuClick(event: MenuItemCommandEvent, action: string, param?: any): void {
-
-    if (event.originalEvent) {
-      event.originalEvent.preventDefault();
-    }
-
-    switch (action) {
-      case 'navigate':
-        this.openMenuInNewTab(param);
-        break;
-      case 'logout':
-        this.logout();
-        break;
-    }
+  if (event.originalEvent) {
+    event.originalEvent.preventDefault();
   }
+
+  switch (action) {
+    case 'navigate':
+      this.openMenuAdaptive(param);        // <— ganti ini
+      if (this.mobileMenuOpen) this.toggleMobileMenu(false);
+      break;
+    case 'logout':
+      this.logout();
+      break;
+  }
+}
+
 
   /*initializeMenu() {
     this.items = [
@@ -359,7 +407,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  openMenuInNewTab(menuLabel: string) {
+  openMenuAdaptive(menuLabel: string) {
     const routes: { [key: string]: string } = {
       requestlist: '/requestlist',
       quotationslist: '/quotationManuallist',
@@ -370,13 +418,31 @@ export class NavbarComponent implements OnInit, OnDestroy {
       resultquotationmanuallist: '/inquiry-results-manual-list',
       customerprofile: '/CustomerProfile',
     };
-    if (routes[menuLabel]) {
-      const route = this.router.serializeUrl(this.router.createUrlTree([routes[menuLabel]]));
-      window.open(route, '_blank');
+    const path = routes[menuLabel];
+    if (!path) return;
+
+    const isMobile = window.matchMedia('(max-width: 1023px)').matches;
+
+    if (isMobile) {
+      // Mobile: navigasi di tab yang sama
+      this.router.navigateByUrl(path);
     } else {
-      console.warn(`No route defined for menu: ${menuLabel}`);
+      // Desktop: tetap buka tab baru
+      const url = this.router.serializeUrl(this.router.createUrlTree([path]));
+      window.open(url, '_blank');
     }
   }
+
+  navigateQuickLink(path: string) {
+  const isMobile = window.matchMedia('(max-width: 1023px)').matches;
+  if (isMobile) {
+    this.router.navigateByUrl(path);
+    this.toggleMobileMenu(false);
+  } else {
+    const url = this.router.serializeUrl(this.router.createUrlTree([path]));
+    window.open(url, '_blank');
+  }
+}
 
   log_infonavbar() {
     this.notif = [];
@@ -449,10 +515,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.callothermethodheadernalogout();
     this.vusr = null;
     this.vusrd = null;
+    this.myacc = 'My Account';
+    this.mypp  = 'assets/user.png';
+    this.toggleMobileMenu(false);
+    this.mobileSections = { seller: false, rfq: false, profile: false };
   }
 
   callothermethodheadernalogout() {
     this.logserv.callmethodfromothercomponentheaderbarlogout();
+  }
+
+  get isLoggedIn(): boolean {
+    return !!this.vusrd;
   }
 
   openSearchPage(searchTerm: string): void {
@@ -479,4 +553,76 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/mainhome');
   }
 }
+
+openAbout(ev?: Event) {
+    ev?.preventDefault();
+    this.dialog.open(AboutComponent, {
+      height: 'auto',
+      maxWidth: '300px',
+      width: '80%',
+      disableClose: true,
+      panelClass: 'custom-dialog-container'
+    });
+    this.toggleMobileMenu(false); // opsional: tutup drawer
+  }
+
+  openRFQ(ev?: Event) {
+    ev?.preventDefault();
+    this.dialog.open(RfqComponent, {
+      height: 'auto',
+      maxWidth: '300px',
+      width: '80%',
+      disableClose: true,
+      panelClass: 'custom-dialog-container'
+    });
+    this.toggleMobileMenu(false);
+  }
+
+  openHelp(ev?: Event) {
+    ev?.preventDefault();
+    this.dialog.open(HelpComponent, {
+      maxHeight: '90vh',
+      maxWidth: '700px',
+      width: '90%',
+      disableClose: true,
+      panelClass: 'custom-dialog-container',
+      autoFocus: 'h2',
+    });
+    this.toggleMobileMenu(false);
+  }
+
+  openLoginMobile(ev?: Event) {
+    ev?.preventDefault();
+    this.toggleMobileMenu(false);
+    const ref = this.dialog.open(LoginCompComponent, {
+      height: 'auto',
+      maxWidth: '300px',
+      width: '80%',
+      disableClose: true,
+      panelClass: 'custom-dialog-container'
+    });
+    ref.afterClosed().subscribe(() => {
+      this.checkUserStatus();
+      this.getCartList();
+      this.initializeMenu();
+    });
+  }
+
+  openSignupMobile(ev?: Event) {
+    ev?.preventDefault();
+    const ref = this.dialog.open(CompRegisComponent, {
+      height: '90%',
+      maxWidth: '1000px',
+      width: '80%',
+      disableClose: false,
+      panelClass: 'custom-dialog-container'
+    });
+    ref.afterClosed().subscribe(() => {
+      this.checkUserStatus();
+    });
+    ref.backdropClick().subscribe(() => ref.close());
+
+    ref.afterClosed().subscribe(() => this.checkUserStatus());
+  }
+
 }

@@ -1,5 +1,5 @@
 <header class="menu sticky top-0 z-10">
-  <app-header-nav></app-header-nav>
+  <app-header-nav class="hidden lg:block"></app-header-nav>
 
   <div class="middle-header bg-white">
     <div class="container mx-auto px-2">
@@ -44,15 +44,234 @@
         </div>
 
         <!-- Mega Menu (desktop) -->
-        <div
-          *ngIf="isMegaMenuVisible"
-          class="hidden items-center justify-center bg-white flex-shrink-0 lg:flex"
-        >
+        <div *ngIf="isMegaMenuVisible"
+            class="hidden items-center justify-center bg-white flex-shrink-0 lg:flex">
           <p-megamenu [model]="items" class="w-auto"></p-megamenu>
         </div>
 
+        <!-- Mobile drawer -->
+        <div
+          *ngIf="mobileMenuOpen"
+          class="fixed inset-0 z-[70] lg:hidden"
+          id="mobile-menu"
+        >
+          <!-- Backdrop -->
+          <div class="absolute inset-0 bg-black/40" (click)="toggleMobileMenu(false)"></div>
+
+          <!-- Panel -->
+          <nav
+            class="absolute left-0 top-0 h-full w-[88%] max-w-sm translate-x-0 overflow-y-auto bg-white shadow-xl transition-transform"
+            role="dialog"
+            aria-modal="true"
+          >
+            <!-- Header -->
+            <div class="flex items-center justify-between border-b px-4 py-3">
+              <div class="flex items-center gap-3">
+                <ng-container *ngIf="myacc !== 'My Account'; else guestAvatar">
+                  <img
+                    [src]="mypp"
+                    (error)="onImageError($event)"
+                    alt="User Avatar"
+                    class="h-8 w-8 rounded-full object-cover"
+                  />
+                </ng-container>
+                <ng-template #guestAvatar>
+                  <p-avatar icon="pi pi-user" shape="circle" styleClass="h-8 w-8"></p-avatar>
+                </ng-template>
+                <span class="text-base font-semibold line-clamp-1">{{ myacc }}</span>
+              </div>
+              <button
+                type="button"
+                class="rounded-md p-2 text-gray-600 hover:bg-gray-100"
+                (click)="toggleMobileMenu(false)"
+                aria-label="Close menu"
+              >
+                <i class="pi pi-times text-lg"></i>
+              </button>
+            </div>
+
+            <!-- Body: Accordion sections -->
+            <div class="divide-y">
+              <section class="px-2 py-2 lg:hidden">
+                <div class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-500">Quick Links</div>
+                <div class="mt-1 space-y-1 px-2">
+                  <button type="button" class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-gray-100"
+                          (click)="openAbout($event)">
+                    About
+                  </button>
+                  <button type="button" class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-gray-100"
+                          (click)="openRFQ($event)">
+                    Request For Quotation
+                  </button>
+                  <button type="button" class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-gray-100"
+                          (click)="openHelp($event)">
+                    Need Help
+                  </button>
+                </div>
+              </section>
+
+              <!-- CTA Account khusus mobile saat BELUM login -->
+              <section class="px-2 py-2" *ngIf="!isLoggedIn">
+                <div class="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  Account
+                </div>
+                <div class="flex gap-2 px-2">
+                  <button
+                    type="button"
+                    (click)="openLoginMobile($event)"
+                    class="flex-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    type="button"
+                    (click)="openSignupMobile($event)"
+                    class="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:bg-gray-50"
+                  >
+                    Create Account
+                  </button>
+                </div>
+              </section>
+
+              <!-- Seller -->
+              <section class="px-2 py-2" *ngIf="isLoggedIn">
+                <button
+                  type="button"
+                  class="flex w-full items-center justify-between rounded-lg px-3 py-3 text-left text-gray-900 hover:bg-gray-50"
+                  (click)="isLoggedIn ? toggleSection('seller') : openLoginMobile($event)"
+                  [class.opacity-50]="!isLoggedIn || isTypeC"
+                  [attr.aria-disabled]="(!isLoggedIn || isTypeC) ? 'true' : null"
+                >
+                  <span class="inline-flex items-center gap-2">
+                    <i class="pi pi-box"></i>
+                    <span class="font-medium">Seller</span>
+                  </span>
+                  <i class="pi" [ngClass]="mobileSections['seller'] ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+                </button>
+
+                <div *ngIf="mobileSections['seller']" class="space-y-1 px-2 pb-2">
+                  <button
+                    type="button"
+                    class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-gray-100"
+                    (click)="isTypeC ? showNIBMessage() : handleNavigate('requestlist')"
+                  >
+                    Request List
+                  </button>
+
+                  <button
+                    type="button"
+                    class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-gray-100"
+                    (click)="isTypeC ? showNIBMessage() : handleNavigate('sellerquotationmanuallist')"
+                  >
+                    Custom Inquiries
+                  </button>
+
+                  <button
+                    type="button"
+                    class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-gray-100"
+                    (click)="isTypeC ? showNIBMessage() : handleNavigate('sellerquotationslist')"
+                  >
+                    Product Inquiries
+                  </button>
+                </div>
+              </section>
+
+              <!-- Request For Quotations -->
+              <section class="px-2 py-2" *ngIf="isLoggedIn">
+                <button
+                  type="button"
+                  class="flex w-full items-center justify-between rounded-lg px-3 py-3 text-left text-gray-900 hover:bg-gray-50"
+                  (click)="isLoggedIn ? toggleSection('rfq') : openLoginMobile($event)"
+                  [class.opacity-50]="!isLoggedIn || isTypeC"
+                  [attr.aria-disabled]="(!isLoggedIn || isTypeC) ? 'true' : null"
+                >
+                  <span class="inline-flex items-center gap-2">
+                    <i class="pi pi-mobile"></i>
+                    <span class="font-medium">Request For Quotations</span>
+                  </span>
+                  <i class="pi" [ngClass]="mobileSections['rfq'] ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+                </button>
+
+                <div *ngIf="mobileSections['rfq']" class="space-y-1 px-2 pb-2">
+                  <button
+                    type="button"
+                    class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-gray-100"
+                    (click)="isTypeC ? showNIBMessage() : handleNavigate('quotationmanuallist')"
+                  >
+                    Custom RFQ
+                  </button>
+                  <button
+                    type="button"
+                    class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-gray-100"
+                    (click)="isTypeC ? showNIBMessage() : handleNavigate('resultquotationmanuallist')"
+                  >
+                    Review Offers (Custom RFQ)
+                  </button>
+                  <button
+                    type="button"
+                    class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-gray-100"
+                    (click)="isTypeC ? showNIBMessage() : handleNavigate('quotationslist')"
+                  >
+                    RFQ from Catalog
+                  </button>
+                  <button
+                    type="button"
+                    class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-gray-100"
+                    (click)="isTypeC ? showNIBMessage() : handleNavigate('resultquotationslist')"
+                  >
+                    Review Offers (Catalog RFQ)
+                  </button>
+                </div>
+              </section>
+
+              <!-- Profile -->
+              <section class="px-2 py-2" *ngIf="isLoggedIn">
+                <button
+                  type="button"
+                  class="flex w-full items-center justify-between rounded-lg px-3 py-3 text-left text-gray-900 hover:bg-gray-50"
+                  (click)="toggleSection('profile')"
+                >
+                  <span class="inline-flex items-center gap-2">
+                    <i class="pi pi-clock"></i>
+                    <span class="font-medium">Profile</span>
+                  </span>
+                  <i class="pi" [ngClass]="mobileSections['profile'] ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+                </button>
+
+                <div *ngIf="mobileSections['profile']" class="space-y-1 px-2 pb-2">
+                  <button
+                    type="button"
+                    class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-gray-100"
+                    (click)="handleNavigate('customerprofile')"
+                  >
+                    Customer Profile
+                  </button>
+                  <button
+                    type="button"
+                    class="block w-full rounded-md px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50"
+                    (click)="logout(); toggleMobileMenu(false)"
+                  >
+                    Log Out
+                  </button>
+                </div>
+              </section>
+            </div>
+          </nav>
+        </div>
+
         <!-- Right actions: Notifications & Cart -->
-        <div class="flex w-auto flex-shrink-0 justify-center gap-5 lg:gap-10">
+        <div class="ml-auto flex w-auto flex-shrink-0 items-center justify-center gap-3 lg:gap-5">
+
+          <button
+            type="button"
+            (click)="toggleMobileMenu(true)"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 focus:outline-none lg:hidden"
+            aria-label="Open main menu"
+            aria-controls="mobile-menu"
+            [attr.aria-expanded]="mobileMenuOpen"
+          >
+            <i class="pi pi-bars text-base"></i>
+          </button>
 
           <!-- Notifications -->
           <div class="group relative py-2" (mouseleave)="notificationExpanded = false">
