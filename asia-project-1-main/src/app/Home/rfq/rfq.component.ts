@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './rfq.component.html',
   styleUrl: './rfq.component.css'
 })
-export class RfqComponent implements OnInit { 
+export class RfqComponent implements OnInit {
 
   rfqContent: string = '';
   isLoading: boolean = true;
@@ -20,18 +20,18 @@ export class RfqComponent implements OnInit {
    ngOnInit(): void {
     this.homeService.mainRfq().subscribe({
       next: (response) => {
-        this.rfqContent = response; 
-        this.isLoading = false;   
+        this.rfqContent = response;
+        this.isLoading = false;
         console.log('Data RFQ diterima:', response);
       },
       error: (err) => {
         console.error('Gagal mengambil data RFQ:', err);
         this.rfqContent = 'Gagal memuat konten. Silakan coba lagi nanti.';
-        this.isLoading = false;    
+        this.isLoading = false;
       }
     });
   }
-  
+
   closeForm() {
     this.dialogRef.close(true);
   }
