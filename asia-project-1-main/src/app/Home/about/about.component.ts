@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './about.component.html',
   styleUrl: './about.component.css'
 })
-export class AboutComponent implements  OnInit { 
+export class AboutComponent implements  OnInit {
 
   aboutContent: string = '';
   isLoading: boolean = true;
@@ -20,18 +20,18 @@ export class AboutComponent implements  OnInit {
    ngOnInit(): void {
     this.homeService.mainAbout().subscribe({
       next: (response) => {
-        this.aboutContent = response; 
-        this.isLoading = false;   
+        this.aboutContent = response;
+        this.isLoading = false;
         console.log('Data RFQ diterima:', response);
       },
       error: (err) => {
         console.error('Gagal mengambil data RFQ:', err);
         this.aboutContent = 'Gagal memuat konten. Silakan coba lagi nanti.';
-        this.isLoading = false;    
+        this.isLoading = false;
       }
     });
   }
-  
+
   closeForm() {
     this.dialogRef.close(true);
   }
