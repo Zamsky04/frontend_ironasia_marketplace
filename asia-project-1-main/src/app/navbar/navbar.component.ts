@@ -97,6 +97,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.broadcastChannel = new BroadcastChannel('cart_update_channel');
   }
 
+  private dialogDefaults = {
+    width: '640px',
+    maxWidth: '95vw',
+    maxHeight: '85vh',
+    disableClose: true,
+    panelClass: 'ia-dialog',
+    autoFocus: false,
+    restoreFocus: false,
+  } as const;
+
   ngOnInit() {
     this.checkUserStatus();
    // if (this.typeb==='(B)') {
@@ -310,23 +320,23 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.typeb === '(C)'
       ? {
           label: 'Request For Quotations',
-          icon: 'pi pi-mobile',
+          icon: 'pi pi-file-edit',
           styleClass: 'disabled-link',
           command: () => this.showNIBMessage()
         }
       : {
           label: 'Request For Quotations',
-          icon: 'pi pi-mobile',
+          icon: 'pi pi-file-edit',
           items: [
             [{
-              label: '',
+              label: 'Custom RFQ & Review',
               items: [
                 { label: 'Custom RFQ', command: (e: MenuItemCommandEvent) => this.handleMenuClick(e, 'navigate', 'quotationmanuallist')}, // Tipe ditambahkan
                 { label: 'Review Offers for Custom RFQ', command: (e: MenuItemCommandEvent) => this.handleMenuClick(e, 'navigate', 'resultquotationmanuallist')}, // Tipe ditambahkan
               ],
             }],
             [{
-              label: '',
+              label: 'RFQ from Catalog & Review',
               items: [
                 { label: 'RFQ from Catalog', command: (e: MenuItemCommandEvent) => this.handleMenuClick(e, 'navigate', 'quotationslist') }, // Tipe ditambahkan
                 { label: 'Review Offers for Catalog RFQ', command: (e: MenuItemCommandEvent) => this.handleMenuClick(e, 'navigate', 'resultquotationslist') }, // Tipe ditambahkan
@@ -358,7 +368,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     {
       label: 'Profile',
-      icon: 'pi pi-clock',
+      icon: 'pi pi-user-edit',
       items: [
         [{
           label: 'Customer Detail',
@@ -554,40 +564,21 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 }
 
-openAbout(ev?: Event) {
+  openAbout(ev?: Event) {
     ev?.preventDefault();
-    this.dialog.open(AboutComponent, {
-      height: 'auto',
-      maxWidth: '300px',
-      width: '80%',
-      disableClose: true,
-      panelClass: 'custom-dialog-container'
-    });
-    this.toggleMobileMenu(false); // opsional: tutup drawer
+    this.dialog.open(AboutComponent, { ...this.dialogDefaults });
+    this.toggleMobileMenu(false);
   }
 
   openRFQ(ev?: Event) {
     ev?.preventDefault();
-    this.dialog.open(RfqComponent, {
-      height: 'auto',
-      maxWidth: '300px',
-      width: '80%',
-      disableClose: true,
-      panelClass: 'custom-dialog-container'
-    });
+    this.dialog.open(RfqComponent, { ...this.dialogDefaults });
     this.toggleMobileMenu(false);
   }
 
   openHelp(ev?: Event) {
     ev?.preventDefault();
-    this.dialog.open(HelpComponent, {
-      maxHeight: '90vh',
-      maxWidth: '700px',
-      width: '90%',
-      disableClose: true,
-      panelClass: 'custom-dialog-container',
-      autoFocus: 'h2',
-    });
+    this.dialog.open(HelpComponent, { ...this.dialogDefaults });
     this.toggleMobileMenu(false);
   }
 
