@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './help.component.html',
   styleUrl: './help.component.css'
 })
-export class HelpComponent implements OnInit { 
+export class HelpComponent implements OnInit {
 
   helpContent: string = '';
   isLoading: boolean = true;
@@ -20,18 +20,18 @@ export class HelpComponent implements OnInit {
    ngOnInit(): void {
     this.homeService.mainHelp().subscribe({
       next: (response) => {
-        this.helpContent = response; 
-        this.isLoading = false;   
+        this.helpContent = response;
+        this.isLoading = false;
         console.log('Data RFQ diterima:', response);
       },
       error: (err) => {
         console.error('Gagal mengambil data RFQ:', err);
         this.helpContent = 'Gagal memuat konten. Silakan coba lagi nanti.';
-        this.isLoading = false;    
+        this.isLoading = false;
       }
     });
   }
-  
+
   closeForm() {
     this.dialogRef.close(true);
   }
