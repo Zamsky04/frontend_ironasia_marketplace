@@ -1,0 +1,17 @@
+/* Paksa warna tombol primary di section Top Ranking jadi biru */
+:host {
+  --p-primary-color: #0056d6;                /* warna dasar primary */
+  --p-primary-contrast-color: #ffffff;       /* teks di atas primary */
+
+  --p-button-primary-background: var(--p-primary-color);
+  --p-button-primary-border-color: var(--p-primary-color);
+  --p-button-primary-color: var(--p-primary-contrast-color);
+
+  --p-button-primary-hover-background: #0040a8;
+  --p-button-primary-hover-border-color: #0040a8;
+  --p-button-primary-hover-color: #ffffff;
+
+  --p-button-primary-active-background: #0040a8;
+  --p-button-primary-active-border-color: #0040a8;
+  --p-button-primary-active-color: #ffffff;
+}
