@@ -211,43 +211,21 @@ export class HeaderNavComponent implements OnInit  {
   (event.target as HTMLImageElement).src = 'assets/user.png';
 }
 
-about(event: Event) {
-  event.preventDefault();
-  const dialogRef = this.dialog.open(AboutComponent, {
-    height: 'auto',
-    maxWidth: '300px',
+  about(event: Event) {
+    event.preventDefault();
+    this.dialog.open(AboutComponent, { ...this.dialogDefaults });
+  }
 
-    width: '80%',
-    disableClose: true,
-    panelClass: 'custom-dialog-container'
+  rfq(event: Event) {
+    event.preventDefault();
+    this.dialog.open(RfqComponent, { ...this.dialogDefaults });
+  }
 
-  });
-}
+  help(event: Event) {
+    event.preventDefault();
+    this.dialog.open(HelpComponent, { ...this.dialogDefaults });
+  }
 
-rfq(event: Event) {
-  event.preventDefault();
-  const dialogRef = this.dialog.open(RfqComponent, {
-    height: 'auto',
-    maxWidth: '300px',
-
-    width: '80%',
-    disableClose: true,
-    panelClass: 'custom-dialog-container'
-
-  });
-}
-
-help(event: Event) {
-  event.preventDefault();
-  const dialogRef = this.dialog.open(HelpComponent, {
-    maxHeight: '90vh',
-    maxWidth: '700px',
-    width: '90%',
-    disableClose: true,
-    panelClass: 'custom-dialog-container',
-      autoFocus: 'h2',
-  });
-}
 isAccountOpen = false;
 
   constructor(
@@ -257,6 +235,16 @@ isAccountOpen = false;
     private router: Router,
     private el: ElementRef
   ) {}
+
+  private dialogDefaults = {
+    width: '640px',
+    maxWidth: '95vw',
+    maxHeight: '85vh',
+    disableClose: true,
+    panelClass: 'ia-dialog',
+    autoFocus: false,
+    restoreFocus: false,
+  } as const;
 
   // === klik di luar -> tutup dropdown
   @HostListener('document:click', ['$event'])
